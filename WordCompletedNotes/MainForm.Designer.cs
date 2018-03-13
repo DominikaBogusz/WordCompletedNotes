@@ -30,6 +30,7 @@
         {
             this.textBox = new System.Windows.Forms.TextBox();
             this.listBox = new System.Windows.Forms.ListBox();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.SuspendLayout();
             // 
             // textBox
@@ -49,13 +50,26 @@
             this.listBox.Size = new System.Drawing.Size(130, 238);
             this.listBox.TabIndex = 1;
             // 
+            // menuStrip
+            // 
+            this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.menuStrip.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
+            this.menuStrip.Location = new System.Drawing.Point(9, 9);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(98, 23);
+            this.menuStrip.TabIndex = 3;
+            this.menuStrip.Text = "menuStrip1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 261);
+            this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.listBox);
             this.Controls.Add(this.textBox);
+            this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "WordCompletedNotes";
             this.ResumeLayout(false);
@@ -67,6 +81,7 @@
 
         private System.Windows.Forms.TextBox textBox;
         private System.Windows.Forms.ListBox listBox;
+        private System.Windows.Forms.MenuStrip menuStrip;
     }
 }
 
