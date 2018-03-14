@@ -40,7 +40,9 @@
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(273, 236);
             this.textBox.TabIndex = 0;
+            this.textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
             this.textBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
+            this.textBox.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textBox_PreviewKeyDown);
             // 
             // listBox
             // 
@@ -57,7 +59,7 @@
             this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
             this.menuStrip.Location = new System.Drawing.Point(9, 9);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(98, 23);
+            this.menuStrip.Size = new System.Drawing.Size(6, 4);
             this.menuStrip.TabIndex = 3;
             this.menuStrip.Text = "menuStrip1";
             // 
