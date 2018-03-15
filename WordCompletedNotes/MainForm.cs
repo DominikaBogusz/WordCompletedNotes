@@ -16,9 +16,14 @@ namespace WordCompletedNotes
         private IComplementarable dictionary;
         string nextWord = "";
 
-        private int lineHeight;
-        private int fontWidth;
-        private int spaceWidth;
+        private float lineHeight;
+        private float fontWidth;
+        private float spaceWidth;
+
+        int positionY;
+        int positionX;
+
+        bool notEnoughSpace = false;
 
         public MainForm()
         {
@@ -36,59 +41,29 @@ namespace WordCompletedNotes
             Console.WriteLine("LineHeight: " + lineHeight);
             Console.WriteLine("FontWidth: " + fontWidth);
             Console.WriteLine("SpaceWidth: " + spaceWidth);
+
+            positionY = textBox.Bounds.Top + Convert.ToInt32(lineHeight);
+            positionX = textBox.Bounds.Left;
         }
 
-        private void textBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            switch (e.KeyChar)
+            Console.WriteLine("preview");
+
+            switch (e.KeyCode)
             {
-                case (char)32: //Space
-                case (char)13: //Enter
-                    if (nextWord != "")
-                    {
-                        dictionary.Insert(nextWord);
-                        nextWord = "";
-                    }
+                case Keys.Down:
+                case Keys.Up:
+                case Keys.Right:
+                    e.IsInputKey = true;
                     break;
-                case (char)8: //Backspace
-                    if (nextWord != "")
-                    {
-                        nextWord = nextWord.Remove(nextWord.Length - 1);
-                    }
-                    break;
-                default:
-                    nextWord += e.KeyChar;
-                    break;
-
-            }
-
-            listBox.Items.Clear();
-            listBox.Visible = false;
-            if (nextWord != "")
-            {
-                List<string> a = dictionary.FindMostUsedMatches(nextWord);
-                listBox.Items.AddRange(a.ToArray());
-                if (listBox.Items.Count > 0)
-                {
-                    listBox.Visible = true;
-                    int wordsInLastLine = textBox.Lines[textBox.Lines.Length - 1].Split(' ').Length;
-                    listBox.Location = new Point(textBox.Bounds.X + (textBox.Lines[textBox.Lines.Length - 1].Length - wordsInLastLine - 1) * fontWidth + wordsInLastLine * spaceWidth, textBox.Bounds.Y + (textBox.Lines.Length * lineHeight + 1));
-
-                    listBox.SetSelected(0, true);
-                }
-
-                if (textBox.TextLength > 0)
-                {
-                    Console.Clear();
-                    Console.WriteLine(textBox.Lines.Length);
-                    Console.WriteLine(textBox.Lines[0].Length);
-                    Console.WriteLine(textBox.Lines[0]);
-                }
             }
         }
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
         {
+            Console.WriteLine("down");
+
             switch (e.KeyCode)
             {
                 case Keys.Down:
@@ -108,15 +83,95 @@ namespace WordCompletedNotes
             }
         }
 
-        private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            switch (e.KeyCode)
+            Console.WriteLine("press");
+
+            switch (e.KeyChar)
             {
-                case Keys.Down:
-                case Keys.Up:
-                case Keys.Right:
-                    e.IsInputKey = true;
+                case (char)32: //Space
+                    if (nextWord != "")
+                    {
+                        dictionary.Insert(nextWord);
+                        nextWord = "";
+                    }
                     break;
+                case (char)13: //Enter
+                    if (nextWord != "")
+                    {
+                        dictionary.Insert(nextWord);
+                        nextWord = "";
+                    }
+                    positionX = textBox.Location.X;
+                    positionY = Convert.ToInt32(textBox.Location.Y + (textBox.Lines.Length + 1) * lineHeight);
+                    break;
+                case (char)8: //Backspace
+                    if (nextWord != "")
+                    {
+                        nextWord = nextWord.Remove(nextWord.Length - 1);
+                    }
+                    break;
+                default:
+                    nextWord += e.KeyChar;
+                    break;
+            }
+
+            listBox.Items.Clear();
+            listBox.Visible = false;
+            if (nextWord != "")
+            {
+                List<string> list = dictionary.FindMostUsedMatches(nextWord);
+                if (list.Any())
+                {
+                    listBox.Height = (list.Count + 1) * listBox.ItemHeight;
+                    listBox.Items.AddRange(list.ToArray());
+
+                    int edgeAreaX = textBox.Right - listBox.Width;
+                    int edgeAreaY = textBox.Bottom - listBox.Height;
+
+                    if (positionX > edgeAreaX)
+                    {
+                        positionX = edgeAreaX;
+                        notEnoughSpace = true;
+                    }
+                    else if (positionX < edgeAreaX)
+                    {
+                        positionX = Convert.ToInt32(textBox.Location.X + MeasureStringWidth(textBox.Lines[textBox.Lines.Length - 1]));
+                    }
+
+                    if (positionY >= edgeAreaY)
+                    {
+                        positionY = edgeAreaY;
+                        using (Graphics g = textBox.CreateGraphics())
+                        {
+                            g.DrawLine(Pens.Red, new Point(textBox.Left, Convert.ToInt32((textBox.Lines.Length - 1.5) * lineHeight)), new Point(textBox.Right, Convert.ToInt32((textBox.Lines.Length - 1.5) * lineHeight)));
+                        }
+                    }
+                    else
+                    {
+                        using (Graphics g = textBox.CreateGraphics())
+                        {
+                            g.DrawLine(Pens.Black, new Point(textBox.Left, Convert.ToInt32(textBox.Lines.Length * lineHeight)), new Point(textBox.Right, Convert.ToInt32(textBox.Lines.Length * lineHeight)));
+                        }
+                    }
+
+                    listBox.Location = new Point(positionX, positionY);
+                    listBox.SetSelected(0, true);
+                    listBox.Visible = true;
+                }
+            }
+        }
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine("up");
+
+            if (notEnoughSpace)
+            {
+                string fill = "              ";
+                textBox.AppendText(fill);
+                textBox.SelectionStart = textBox.Text.Length - fill.Length;
+                notEnoughSpace = false;
             }
         }
 
@@ -132,6 +187,14 @@ namespace WordCompletedNotes
 
                 textBox.Text += listBox.SelectedItem.ToString();
                 textBox.SelectionStart = textBox.TextLength;
+            }
+        }
+
+        private float MeasureStringWidth(string text)
+        {
+            using (Graphics g = textBox.CreateGraphics())
+            {
+                return g.MeasureString(text, textBox.Font).Width;
             }
         }
     }
