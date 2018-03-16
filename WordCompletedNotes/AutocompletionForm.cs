@@ -12,8 +12,6 @@ namespace WordCompletedNotes
 {
     public partial class AutocompletionForm : Form
     {
-        private TextBox textBox;
-
         public AutocompletionForm()
         {
             InitializeComponent();
@@ -40,9 +38,34 @@ namespace WordCompletedNotes
             return listBox;
         }
 
-        public void SetTextBox(TextBox t)
+        private void listBox_DrawItem(object sender, DrawItemEventArgs e)
         {
-            textBox = t;
+            e.DrawBackground();
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), e.Bounds);
+            e.DrawFocusRectangle();
+
+            foreach (int selectedIndex in listBox.SelectedIndices)
+            {
+                if (e.Index == selectedIndex)
+                {
+                    e.DrawBackground();
+                    e.Graphics.FillRectangle(new SolidBrush(Color.DeepSkyBlue), e.Bounds);
+                    e.DrawFocusRectangle();
+                }
+            }
+
+            e.Graphics.DrawString(
+                listBox.Items[e.Index].ToString(),
+                listBox.Font,
+                new SolidBrush(Color.Black),
+                0,
+                e.Index * listBox.ItemHeight
+            );
+        }
+
+        private void listBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            listBox.Invalidate();
         }
     }
 }

@@ -20,6 +20,7 @@ namespace WordCompletedNotes
         private float fontWidth;
         private float spaceWidth;
 
+        Point textBoxCorner;
         int positionY;
         int positionX;
 
@@ -43,11 +44,12 @@ namespace WordCompletedNotes
             Console.WriteLine("FontWidth: " + fontWidth);
             Console.WriteLine("SpaceWidth: " + spaceWidth);
 
-            positionY = textBox.Bounds.Top + Convert.ToInt32(lineHeight);
-            positionX = textBox.Bounds.Left;
+            textBoxCorner = textBox.Parent.PointToScreen(textBox.Location);
+
+            positionY = textBoxCorner.Y + Convert.ToInt32(lineHeight);
+            positionX = textBoxCorner.X;
 
             listBox = autoForm.GetListBox();
-            autoForm.SetTextBox(textBox);
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -84,6 +86,9 @@ namespace WordCompletedNotes
                     }
                     ChangeLastWordInTextBox();
                     break;
+                default:
+                    autoForm.Hide();
+                    break;
             }
         }
 
@@ -107,7 +112,7 @@ namespace WordCompletedNotes
                         nextWord = "";
                     }
                     positionX = textBox.Location.X;
-                    positionY = Convert.ToInt32(textBox.Location.Y + (textBox.Lines.Length + 1) * lineHeight);
+                    positionY = Convert.ToInt32(textBoxCorner.Y + (textBox.Lines.Length + 1) * lineHeight);
                     break;
                 case (char)8: //Backspace
                     if (nextWord != "")
@@ -133,7 +138,16 @@ namespace WordCompletedNotes
                     listBox.Items.AddRange(list.ToArray());
                     listBox.SetSelected(0, true);
 
-                    positionX = Convert.ToInt32(Location.X + textBox.Location.X + MeasureStringWidth(textBox.Lines[textBox.Lines.Length - 1]));
+                    float lineWidth = MeasureStringWidth(textBox.Lines[textBox.Lines.Length - 1]);
+
+                    if (lineWidth < textBox.Width)
+                    {
+                        positionX = Convert.ToInt32(textBoxCorner.X + lineWidth);
+                    }
+                    else
+                    {
+                        positionX = Convert.ToInt32(textBoxCorner.X + (textBox.Width - 20));
+                    }
 
                     autoForm.Location = new Point(positionX, positionY);
                     autoForm.Show();
