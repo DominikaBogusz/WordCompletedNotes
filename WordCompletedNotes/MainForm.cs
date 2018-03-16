@@ -21,8 +21,6 @@ namespace WordCompletedNotes
         private float spaceWidth;
 
         Point textBoxCorner;
-        int positionY;
-        int positionX;
 
         AutocompletionForm autoForm = new AutocompletionForm();
         ListBox listBox;
@@ -45,9 +43,6 @@ namespace WordCompletedNotes
             Console.WriteLine("SpaceWidth: " + spaceWidth);
 
             textBoxCorner = textBox.Parent.PointToScreen(textBox.Location);
-
-            positionY = textBoxCorner.Y + Convert.ToInt32(lineHeight);
-            positionX = textBoxCorner.X;
 
             listBox = autoForm.GetListBox();
         }
@@ -78,6 +73,7 @@ namespace WordCompletedNotes
                         listBox.SetSelected(listBox.SelectedIndex + 1, true);
                     }
                     ChangeLastWordInTextBox();
+                    e.Handled = true;
                     break;
                 case Keys.Up:
                     if (listBox.SelectedIndex > 0)
@@ -85,6 +81,7 @@ namespace WordCompletedNotes
                         listBox.SetSelected(listBox.SelectedIndex - 1, true);
                     }
                     ChangeLastWordInTextBox();
+                    e.Handled = true;
                     break;
                 default:
                     autoForm.Hide();
@@ -111,8 +108,6 @@ namespace WordCompletedNotes
                         dictionary.Insert(nextWord);
                         nextWord = "";
                     }
-                    positionX = textBox.Location.X;
-                    positionY = Convert.ToInt32(textBoxCorner.Y + (textBox.Lines.Length + 1) * lineHeight);
                     break;
                 case (char)8: //Backspace
                     if (nextWord != "")
@@ -138,18 +133,10 @@ namespace WordCompletedNotes
                     listBox.Items.AddRange(list.ToArray());
                     listBox.SetSelected(0, true);
 
-                    float lineWidth = MeasureStringWidth(textBox.Lines[textBox.Lines.Length - 1]);
+                    Point cursorPosition = textBox.GetPositionFromCharIndex(textBox.SelectionStart - 1);
+                    Point relativeCursorPosition = new Point(cursorPosition.X + textBoxCorner.X + (int)(fontWidth + 1), cursorPosition.Y + textBoxCorner.Y + (int)(lineHeight + 1));
 
-                    if (lineWidth < textBox.Width)
-                    {
-                        positionX = Convert.ToInt32(textBoxCorner.X + lineWidth);
-                    }
-                    else
-                    {
-                        positionX = Convert.ToInt32(textBoxCorner.X + (textBox.Width - 20));
-                    }
-
-                    autoForm.Location = new Point(positionX, positionY);
+                    autoForm.Location = relativeCursorPosition;
                     autoForm.Show();
                 }
             }
