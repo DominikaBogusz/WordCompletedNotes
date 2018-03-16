@@ -23,7 +23,8 @@ namespace WordCompletedNotes
         int positionY;
         int positionX;
 
-        bool notEnoughSpace = false;
+        AutocompletionForm autoForm = new AutocompletionForm();
+        ListBox listBox;
 
         public MainForm()
         {
@@ -44,6 +45,9 @@ namespace WordCompletedNotes
 
             positionY = textBox.Bounds.Top + Convert.ToInt32(lineHeight);
             positionX = textBox.Bounds.Left;
+
+            listBox = autoForm.GetListBox();
+            autoForm.SetTextBox(textBox);
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -116,63 +120,30 @@ namespace WordCompletedNotes
                     break;
             }
 
+            autoForm.Hide();
             listBox.Items.Clear();
-            listBox.Visible = false;
+
             if (nextWord != "")
             {
                 List<string> list = dictionary.FindMostUsedMatches(nextWord);
                 if (list.Any())
                 {
-                    listBox.Height = (list.Count + 1) * listBox.ItemHeight;
+                    int height = (list.Count + 1) * listBox.ItemHeight;
+                    autoForm.Height = listBox.Height = height;
                     listBox.Items.AddRange(list.ToArray());
-
-                    int edgeAreaX = textBox.Right - listBox.Width;
-                    int edgeAreaY = textBox.Bottom - listBox.Height;
-
-                    if (positionX > edgeAreaX)
-                    {
-                        positionX = edgeAreaX;
-                        notEnoughSpace = true;
-                    }
-                    else if (positionX < edgeAreaX)
-                    {
-                        positionX = Convert.ToInt32(textBox.Location.X + MeasureStringWidth(textBox.Lines[textBox.Lines.Length - 1]));
-                    }
-
-                    if (positionY >= edgeAreaY)
-                    {
-                        positionY = edgeAreaY;
-                        using (Graphics g = textBox.CreateGraphics())
-                        {
-                            g.DrawLine(Pens.Red, new Point(textBox.Left, Convert.ToInt32((textBox.Lines.Length - 1.5) * lineHeight)), new Point(textBox.Right, Convert.ToInt32((textBox.Lines.Length - 1.5) * lineHeight)));
-                        }
-                    }
-                    else
-                    {
-                        using (Graphics g = textBox.CreateGraphics())
-                        {
-                            g.DrawLine(Pens.Black, new Point(textBox.Left, Convert.ToInt32(textBox.Lines.Length * lineHeight)), new Point(textBox.Right, Convert.ToInt32(textBox.Lines.Length * lineHeight)));
-                        }
-                    }
-
-                    listBox.Location = new Point(positionX, positionY);
                     listBox.SetSelected(0, true);
-                    listBox.Visible = true;
+
+                    positionX = Convert.ToInt32(Location.X + textBox.Location.X + MeasureStringWidth(textBox.Lines[textBox.Lines.Length - 1]));
+
+                    autoForm.Location = new Point(positionX, positionY);
+                    autoForm.Show();
                 }
             }
         }
 
-        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        private void textBox_KeyUp(object sender, KeyEventArgs e)
         {
             Console.WriteLine("up");
-
-            if (notEnoughSpace)
-            {
-                string fill = "              ";
-                textBox.AppendText(fill);
-                textBox.SelectionStart = textBox.Text.Length - fill.Length;
-                notEnoughSpace = false;
-            }
         }
 
         private void ChangeLastWordInTextBox()
