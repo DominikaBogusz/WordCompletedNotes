@@ -14,7 +14,6 @@ namespace WordCompletedNotes
     public partial class MainForm : Form
     {
         private IComplementarable dictionary;
-        string nextWord = "";
 
         private float lineHeight;
         private float fontWidth;
@@ -24,6 +23,9 @@ namespace WordCompletedNotes
 
         AutocompletionForm autoForm = new AutocompletionForm();
         ListBox listBox;
+
+        private bool newStart;
+        private int startIndex;
 
         public MainForm()
         {
@@ -38,10 +40,6 @@ namespace WordCompletedNotes
                 spaceWidth = Convert.ToInt32(g.MeasureString(" ", textBox.Font).Width);
             }
 
-            Console.WriteLine("LineHeight: " + lineHeight);
-            Console.WriteLine("FontWidth: " + fontWidth);
-            Console.WriteLine("SpaceWidth: " + spaceWidth);
-
             textBoxCorner = textBox.Parent.PointToScreen(textBox.Location);
 
             listBox = autoForm.GetListBox();
@@ -49,13 +47,12 @@ namespace WordCompletedNotes
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            Console.WriteLine("preview");
+            //Console.WriteLine("preview");
 
             switch (e.KeyCode)
             {
                 case Keys.Down:
                 case Keys.Up:
-                case Keys.Right:
                     e.IsInputKey = true;
                     break;
             }
@@ -63,25 +60,33 @@ namespace WordCompletedNotes
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("down");
+            //Console.WriteLine("down");
+
+            newStart = char.IsControl((char)e.KeyCode) || ((int)e.KeyCode < 41 && (int)e.KeyCode > 36);
 
             switch (e.KeyCode)
             {
                 case Keys.Down:
-                    if (listBox.SelectedIndex < listBox.Items.Count - 1)
+                    if (autoForm.Visible)
                     {
-                        listBox.SetSelected(listBox.SelectedIndex + 1, true);
+                        if (listBox.SelectedIndex < listBox.Items.Count - 1)
+                        {
+                            listBox.SetSelected(listBox.SelectedIndex + 1, true);
+                        }
+                        ChangeEditedWord();
+                        e.Handled = true;
                     }
-                    ChangeLastWordInTextBox();
-                    e.Handled = true;
                     break;
                 case Keys.Up:
-                    if (listBox.SelectedIndex > 0)
+                    if (autoForm.Visible)
                     {
-                        listBox.SetSelected(listBox.SelectedIndex - 1, true);
+                        if (listBox.SelectedIndex > 0)
+                        {
+                            listBox.SetSelected(listBox.SelectedIndex - 1, true);
+                        }
+                        ChangeEditedWord();
+                        e.Handled = true;
                     }
-                    ChangeLastWordInTextBox();
-                    e.Handled = true;
                     break;
                 default:
                     autoForm.Hide();
@@ -91,75 +96,78 @@ namespace WordCompletedNotes
 
         private void textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Console.WriteLine("press");
+            //Console.WriteLine("press");
 
-            switch (e.KeyChar)
+            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart - startIndex);
+            Console.WriteLine("\n" + fromBeginToSelection + " " + textBox.SelectionStart + "\n");
+            int indexOfLastSpace = fromBeginToSelection.LastIndexOf(' ');
+            string lastWord = textBox.Text.Substring(indexOfLastSpace + 1, textBox.SelectionStart - indexOfLastSpace - 1);
+            Console.WriteLine(lastWord + "\n");
+
+            if (e.KeyChar == ' ')
             {
-                case (char)32: //Space
-                    if (nextWord != "")
-                    {
-                        dictionary.Insert(nextWord);
-                        nextWord = "";
-                    }
-                    break;
-                case (char)13: //Enter
-                    if (nextWord != "")
-                    {
-                        dictionary.Insert(nextWord);
-                        nextWord = "";
-                    }
-                    break;
-                case (char)8: //Backspace
-                    if (nextWord != "")
-                    {
-                        nextWord = nextWord.Remove(nextWord.Length - 1);
-                    }
-                    break;
-                default:
-                    nextWord += e.KeyChar;
-                    break;
+                newStart = true;
+
+                dictionary.Insert(lastWord);
+                Console.WriteLine("\n" + lastWord + "\n");
             }
-
-            autoForm.Hide();
-            listBox.Items.Clear();
-
-            if (nextWord != "")
+            else
             {
-                List<string> list = dictionary.FindMostUsedMatches(nextWord);
-                if (list.Any())
+                string nextWord = lastWord + e.KeyChar;
+                Console.WriteLine("\n" + nextWord + "\n");
+
+                autoForm.Hide();
+                listBox.Items.Clear();
+
+                if (nextWord != "")
                 {
-                    int height = (list.Count + 1) * listBox.ItemHeight;
-                    autoForm.Height = listBox.Height = height;
-                    listBox.Items.AddRange(list.ToArray());
-                    listBox.SetSelected(0, true);
+                    List<string> list = dictionary.FindMostUsedMatches(nextWord);
+                    if (list.Any())
+                    {
+                        int height = (list.Count + 1) * listBox.ItemHeight;
+                        autoForm.Height = listBox.Height = height;
+                        listBox.Items.AddRange(list.ToArray());
+                        listBox.SetSelected(0, true);
 
-                    Point cursorPosition = textBox.GetPositionFromCharIndex(textBox.SelectionStart - 1);
-                    Point relativeCursorPosition = new Point(cursorPosition.X + textBoxCorner.X + (int)(fontWidth + 1), cursorPosition.Y + textBoxCorner.Y + (int)(lineHeight + 1));
-
-                    autoForm.Location = relativeCursorPosition;
-                    autoForm.Show();
-                }
+                        UpdateListBoxPosition();
+                        autoForm.Show();
+                    }
+                } 
             }
+        }
+
+        private void textBox_SelectionChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine("selection changed");
+
+            if (newStart) startIndex = textBox.SelectionStart - 1;
         }
 
         private void textBox_KeyUp(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("up");
+            //Console.WriteLine("up");
+
+            newStart = true;
         }
 
-        private void ChangeLastWordInTextBox()
+        private void ChangeEditedWord()
         {
-            if (textBox.TextLength == textBox.SelectionStart && listBox.SelectedItem != null)
-            {
-                if (textBox.Text.Length > 0)
-                {
-                    int p = textBox.Text.LastIndexOf(" ") + 1;
-                    textBox.Text = textBox.Text.Substring(0, p);
-                }
+            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart - startIndex);
+            int indexOfLastSpace = fromBeginToSelection.LastIndexOf(' ');
+            textBox.Text = textBox.Text.Remove(indexOfLastSpace + 1, textBox.SelectionStart - indexOfLastSpace - 1);
+            string wordToInsert = listBox.SelectedItem.ToString();
+            textBox.Text = textBox.Text.Insert(indexOfLastSpace + 1, wordToInsert);
+            textBox.SelectionStart = indexOfLastSpace + 1 + wordToInsert.Length;
+        }
 
-                textBox.Text += listBox.SelectedItem.ToString();
-                textBox.SelectionStart = textBox.TextLength;
-            }
+        private void UpdateListBoxPosition()
+        {
+            textBoxCorner = textBox.Parent.PointToScreen(textBox.Location);
+
+            Point cursorPosition = textBox.GetPositionFromCharIndex(textBox.SelectionStart - 1);
+            Point relativeCursorPosition = new Point(cursorPosition.X + textBoxCorner.X + (int)(fontWidth + 1), cursorPosition.Y + textBoxCorner.Y + (int)(lineHeight + 1));
+
+            autoForm.Location = relativeCursorPosition;
         }
 
         private float MeasureStringWidth(string text)
@@ -168,6 +176,11 @@ namespace WordCompletedNotes
             {
                 return g.MeasureString(text, textBox.Font).Width;
             }
+        }
+
+        private void MainForm_MoveOrResize(object sender, EventArgs e)
+        {
+            UpdateListBoxPosition();
         }
     }
 }

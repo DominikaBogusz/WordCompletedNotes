@@ -57,6 +57,8 @@
             this.Controls.Add(this.textBox);
             this.Name = "MainForm";
             this.Text = "Autocomplete";
+            this.Move += new System.EventHandler(this.MainForm_MoveOrResize);
+            this.Resize += new System.EventHandler(this.MainForm_MoveOrResize);
             this.ResumeLayout(false);
             this.PerformLayout();
 
