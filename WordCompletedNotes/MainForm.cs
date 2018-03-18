@@ -26,7 +26,6 @@ namespace WordCompletedNotes
         ListBox listBox;
 
         private bool newStart;
-        private int startIndex;
 
         public MainForm()
         {
@@ -48,8 +47,6 @@ namespace WordCompletedNotes
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            //Console.WriteLine("preview");
-
             switch (e.KeyCode)
             {
                 case Keys.Down:
@@ -61,8 +58,6 @@ namespace WordCompletedNotes
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
         {
-            //Console.WriteLine("down");
-
             newStart = char.IsControl((char)e.KeyCode) || ((int)e.KeyCode < 41 && (int)e.KeyCode > 36);
 
             switch (e.KeyCode)
@@ -97,24 +92,18 @@ namespace WordCompletedNotes
 
         private void textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //Console.WriteLine("press");
-
-            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart);
-            Console.WriteLine("\n" + fromBeginToSelection + " " + textBox.SelectionStart + "\n");
+            string fromBeginToSelection = textBox.Text.Substring(0, textBox.SelectionStart);
             string lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z").Value.ToLower();
-            Console.WriteLine(lastWord + "\n");
 
-            if (char.IsWhiteSpace(e.KeyChar) || char.IsControl(e.KeyChar) || char.IsPunctuation(e.KeyChar))
+            UpdateListBoxPosition();
+            if (char.IsWhiteSpace(e.KeyChar) || char.IsPunctuation(e.KeyChar) || e.KeyChar == '\n')
             {
                 newStart = true;
-
                 dictionary.Insert(lastWord);
-                Console.WriteLine("\n" + lastWord + "\n");
             }
             else
             {
                 string nextWord = lastWord + e.KeyChar;
-                Console.WriteLine("\n" + nextWord + "\n");
 
                 autoForm.Hide();
                 listBox.Items.Clear();
@@ -127,32 +116,20 @@ namespace WordCompletedNotes
                         int height = (list.Count + 1) * listBox.ItemHeight;
                         autoForm.Height = listBox.Height = height;
                         listBox.Items.AddRange(list.ToArray());
-                        listBox.SetSelected(0, true);
-
-                        UpdateListBoxPosition();
                         autoForm.Show();
                     }
                 } 
             }
         }
 
-        private void textBox_SelectionChanged(object sender, EventArgs e)
-        {
-            Console.WriteLine("selection changed");
-
-            if (newStart) startIndex = textBox.SelectionStart - 1;
-        }
-
         private void textBox_KeyUp(object sender, KeyEventArgs e)
         {
-            //Console.WriteLine("up");
-
             newStart = true;
         }
 
         private void ChangeEditedWord()
         {
-            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart);
+            string fromBeginToSelection = textBox.Text.Substring(0, textBox.SelectionStart);
             Match lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z");
             int indexOfLastWord = lastWord.Index;
             bool isFirstUpper = char.IsUpper(lastWord.Value[0]);
@@ -181,16 +158,14 @@ namespace WordCompletedNotes
             autoForm.Location = relativeCursorPosition;
         }
 
-        private float MeasureStringWidth(string text)
-        {
-            using (Graphics g = textBox.CreateGraphics())
-            {
-                return g.MeasureString(text, textBox.Font).Width;
-            }
-        }
-
         private void MainForm_MoveOrResize(object sender, EventArgs e)
         {
+            UpdateListBoxPosition();
+        }
+
+        private void textBox_Click(object sender, EventArgs e)
+        {
+            autoForm.Hide();
             UpdateListBoxPosition();
         }
     }
