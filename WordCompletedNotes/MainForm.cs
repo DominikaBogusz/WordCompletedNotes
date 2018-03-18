@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WordCompletion;
@@ -98,13 +99,12 @@ namespace WordCompletedNotes
         {
             //Console.WriteLine("press");
 
-            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart - startIndex);
+            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart);
             Console.WriteLine("\n" + fromBeginToSelection + " " + textBox.SelectionStart + "\n");
-            int indexOfLastSpace = fromBeginToSelection.LastIndexOf(' ');
-            string lastWord = textBox.Text.Substring(indexOfLastSpace + 1, textBox.SelectionStart - indexOfLastSpace - 1);
+            string lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z").Value.ToLower();
             Console.WriteLine(lastWord + "\n");
 
-            if (e.KeyChar == ' ')
+            if (char.IsWhiteSpace(e.KeyChar) || char.IsControl(e.KeyChar) || char.IsPunctuation(e.KeyChar))
             {
                 newStart = true;
 
@@ -152,12 +152,18 @@ namespace WordCompletedNotes
 
         private void ChangeEditedWord()
         {
-            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart - startIndex);
-            int indexOfLastSpace = fromBeginToSelection.LastIndexOf(' ');
-            textBox.Text = textBox.Text.Remove(indexOfLastSpace + 1, textBox.SelectionStart - indexOfLastSpace - 1);
+            string fromBeginToSelection = textBox.Text.Substring(startIndex, textBox.SelectionStart);
+            Match lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z");
+            int indexOfLastWord = lastWord.Index;
+            bool isFirstUpper = char.IsUpper(lastWord.Value[0]);
+            textBox.Text = textBox.Text.Remove(indexOfLastWord, textBox.SelectionStart - indexOfLastWord);
             string wordToInsert = listBox.SelectedItem.ToString();
-            textBox.Text = textBox.Text.Insert(indexOfLastSpace + 1, wordToInsert);
-            textBox.SelectionStart = indexOfLastSpace + 1 + wordToInsert.Length;
+            if (isFirstUpper)
+            {
+                wordToInsert = char.ToUpper(wordToInsert[0]) + wordToInsert.Substring(1);
+            }
+            textBox.Text = textBox.Text.Insert(indexOfLastWord, wordToInsert);
+            textBox.SelectionStart = indexOfLastWord + wordToInsert.Length;
         }
 
         private void UpdateListBoxPosition()
@@ -166,6 +172,11 @@ namespace WordCompletedNotes
 
             Point cursorPosition = textBox.GetPositionFromCharIndex(textBox.SelectionStart - 1);
             Point relativeCursorPosition = new Point(cursorPosition.X + textBoxCorner.X + (int)(fontWidth + 1), cursorPosition.Y + textBoxCorner.Y + (int)(lineHeight + 1));
+
+            if (textBox.Text.Length > 0 && (textBox.Text[textBox.Text.Length - 1]) == 10)
+            {
+                relativeCursorPosition = new Point(textBoxCorner.X + (int)(fontWidth + 1), relativeCursorPosition.Y + (int)(lineHeight + 1));
+            }
 
             autoForm.Location = relativeCursorPosition;
         }
