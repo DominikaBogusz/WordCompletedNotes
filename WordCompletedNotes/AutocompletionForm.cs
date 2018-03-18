@@ -12,9 +12,13 @@ namespace WordCompletedNotes
 {
     public partial class AutocompletionForm : Form
     {
-        public AutocompletionForm()
+        private MainForm mainForm;
+
+        public AutocompletionForm(MainForm mf)
         {
             InitializeComponent();
+
+            mainForm = mf;
         }
 
         protected override bool ShowWithoutActivation
@@ -66,6 +70,21 @@ namespace WordCompletedNotes
         private void listBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             listBox.Invalidate();
+            mainForm.ChangeEditedWord();
+        }
+
+        private void AutocompletionForm_MouseClick(object sender, MouseEventArgs e)
+        {
+            int index = listBox.IndexFromPoint(e.Location);
+            if (index != ListBox.NoMatches)
+            {
+                listBox.SetSelected(index, true);
+                Hide();
+            }
+            else
+            {
+                mainForm.Focus();
+            }
         }
     }
 }

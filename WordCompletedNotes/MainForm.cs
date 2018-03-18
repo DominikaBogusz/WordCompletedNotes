@@ -22,7 +22,7 @@ namespace WordCompletedNotes
 
         Point textBoxCorner;
 
-        AutocompletionForm autoForm = new AutocompletionForm();
+        AutocompletionForm autoForm;
         ListBox listBox;
 
         private bool newStart;
@@ -32,6 +32,7 @@ namespace WordCompletedNotes
             InitializeComponent();
 
             dictionary = new SimpleCompletion();
+            autoForm = new AutocompletionForm(this);
 
             using (Graphics g = textBox.CreateGraphics())
             {
@@ -69,7 +70,6 @@ namespace WordCompletedNotes
                         {
                             listBox.SetSelected(listBox.SelectedIndex + 1, true);
                         }
-                        ChangeEditedWord();
                         e.Handled = true;
                     }
                     break;
@@ -80,7 +80,6 @@ namespace WordCompletedNotes
                         {
                             listBox.SetSelected(listBox.SelectedIndex - 1, true);
                         }
-                        ChangeEditedWord();
                         e.Handled = true;
                     }
                     break;
@@ -127,7 +126,7 @@ namespace WordCompletedNotes
             newStart = true;
         }
 
-        private void ChangeEditedWord()
+        public void ChangeEditedWord()
         {
             string fromBeginToSelection = textBox.Text.Substring(0, textBox.SelectionStart);
             Match lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z");
@@ -150,12 +149,21 @@ namespace WordCompletedNotes
             Point cursorPosition = textBox.GetPositionFromCharIndex(textBox.SelectionStart - 1);
             Point relativeCursorPosition = new Point(cursorPosition.X + textBoxCorner.X + (int)(fontWidth + 1), cursorPosition.Y + textBoxCorner.Y + (int)(lineHeight + 1));
 
-            if (textBox.Text.Length > 0 && (textBox.Text[textBox.Text.Length - 1]) == 10)
+            if (textBox.Text.Length > 0 && (textBox.Text[textBox.Text.Length - 1]) == 10 // ASCII 10 - Line Feed
+                || relativeCursorPosition.X > (textBoxCorner.X + textBox.Width - 28)) // approx. font width + scroll bar width
             {
                 relativeCursorPosition = new Point(textBoxCorner.X + (int)(fontWidth + 1), relativeCursorPosition.Y + (int)(lineHeight + 1));
             }
 
             autoForm.Location = relativeCursorPosition;
+        }
+
+        private float MeasureStringWidth(string text)
+        {
+            using (Graphics g = textBox.CreateGraphics())
+            {
+                return g.MeasureString(text, textBox.Font).Width;
+            }
         }
 
         private void MainForm_MoveOrResize(object sender, EventArgs e)
