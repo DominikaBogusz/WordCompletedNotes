@@ -109,7 +109,7 @@ namespace WordCompletedNotes
 
                 if (nextWord != "")
                 {
-                    List<string> list = dictionary.FindMostUsedMatches(nextWord);
+                    List<string> list = dictionary.FindMostUsedMatches(nextWord.ToLower());
                     if (list.Any())
                     {
                         int height = (list.Count + 1) * listBox.ItemHeight;
@@ -129,17 +129,26 @@ namespace WordCompletedNotes
         public void ChangeEditedWord()
         {
             string fromBeginToSelection = textBox.Text.Substring(0, textBox.SelectionStart);
-            Match lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z");
-            int indexOfLastWord = lastWord.Index;
-            bool isFirstUpper = char.IsUpper(lastWord.Value[0]);
-            textBox.Text = textBox.Text.Remove(indexOfLastWord, textBox.SelectionStart - indexOfLastWord);
+            Match lastWordMatch = Regex.Match(fromBeginToSelection, @"\w+\Z");
+            string lastWord = lastWordMatch.Value;
+            textBox.Text = textBox.Text.Remove(lastWordMatch.Index, textBox.SelectionStart - lastWordMatch.Index);
             string wordToInsert = listBox.SelectedItem.ToString();
-            if (isFirstUpper)
+            for (int i = 0; i < lastWord.Length; i++)
             {
-                wordToInsert = char.ToUpper(wordToInsert[0]) + wordToInsert.Substring(1);
+                if (char.IsUpper(lastWord[i]))
+                {
+                    wordToInsert = UpperStringAt(wordToInsert, i);
+                }
             }
-            textBox.Text = textBox.Text.Insert(indexOfLastWord, wordToInsert);
-            textBox.SelectionStart = indexOfLastWord + wordToInsert.Length;
+            textBox.Text = textBox.Text.Insert(lastWordMatch.Index, wordToInsert);
+            textBox.SelectionStart = lastWordMatch.Index + wordToInsert.Length;
+        }
+
+        private string UpperStringAt(string input, int index)
+        {
+            char[] array = input.ToCharArray();
+            array[index] = char.ToUpper(array[index]);
+            return new string(array);
         }
 
         private void UpdateListBoxPosition()
