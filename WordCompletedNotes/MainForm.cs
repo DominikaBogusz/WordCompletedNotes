@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,6 +27,8 @@ namespace WordCompletedNotes
         ListBox listBox;
 
         private bool newStart;
+
+        private string openFile = "";
 
         public MainForm()
         {
@@ -184,6 +187,67 @@ namespace WordCompletedNotes
         {
             autoForm.Hide();
             UpdateListBoxPosition();
+        }
+
+        private void exitMenu_Click(object sender, EventArgs e)
+        {
+            //Application.Exit();
+            Close();
+        }
+
+        private void saveAsMenu_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string path = saveFileDialog.FileName;
+                File.WriteAllText(path, textBox.Text);
+                openFile = path;
+                saveMenu.Enabled = true;
+            }
+        }
+
+        private void openMenu_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string path = openFileDialog.FileName;
+                if (File.Exists(path) == true)
+                {
+                    textBox.Text = File.ReadAllText(openFileDialog.FileName);
+                    openFile = path;
+                    saveMenu.Enabled = true;
+                }
+            }
+        }
+
+        private void saveMenu_Click(object sender, EventArgs e)
+        {
+            if(openFile != "")
+            {
+                if (File.Exists(openFile) == true)
+                {
+                    File.WriteAllText(openFile, textBox.Text);
+                }
+            }
+        }
+
+        private void newMenu_Click(object sender, EventArgs e)
+        {
+            textBox.Clear();
+            openFile = "";
+            saveMenu.Enabled = false;
         }
     }
 }
