@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace WordCompletedNotes
         public MainForm()
         {
             InitializeComponent();
+            Console.OutputEncoding = Encoding.UTF8;
 
             dictionary = new SimpleCompletion();
             autoForm = new AutocompletionForm(this);
@@ -248,6 +250,87 @@ namespace WordCompletedNotes
             textBox.Clear();
             openFile = "";
             saveMenu.Enabled = false;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            Console.WriteLine("--- Reading from textfile ---");
+            var watch1 = System.Diagnostics.Stopwatch.StartNew();
+            ReadWordsFromTextfile();
+            watch1.Stop();
+            var elapsedMs1 = watch1.ElapsedTicks;
+            Console.WriteLine(elapsedMs1 + " ticks");
+            Console.WriteLine("------\n");
+
+            Console.WriteLine("--- Reading from database ---");
+            var watch2 = System.Diagnostics.Stopwatch.StartNew();
+            ReadWordsFromDatabase();
+            var elapsedMs2 = watch2.ElapsedTicks;
+            Console.WriteLine(elapsedMs2 + " ticks");
+            Console.WriteLine("------\n");
+        }
+
+        private void ReadWordsFromTextfile()
+        {
+            string path = Application.StartupPath + @"\Words.txt";
+            if (File.Exists(path) == true)
+            {
+                TrieCompletion tc = new TrieCompletion();
+
+                List<string> lines = File.ReadLines(path).ToList();
+                foreach (string line in lines)
+                {
+                    string[] columns = line.Split(';');
+                    string word = columns[0];
+                    int count = Int32.Parse(columns[1]);
+                    Console.WriteLine(word + ", " + count);
+                    for (int i = 0; i < count; i++)
+                    {
+                        tc.Insert(word);
+                    }
+                }
+
+                List<string> completions = tc.FindMostUsedMatches("al");
+
+                Console.WriteLine("\tFinding 'al' completions...");
+                foreach (string c in completions)
+                {
+                    Console.WriteLine("\t-" + c);
+                }
+                Console.WriteLine("\t...done.");
+            }
+        }
+
+        private void ReadWordsFromDatabase()
+        {
+            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath + @"\WordsDatabase.mdf;Integrated Security=True";
+            SqlConnection cnn = new SqlConnection(connetionString);
+            cnn.Open();
+            SqlCommand cmd = new SqlCommand("Select * from Words", cnn);
+            SqlDataReader sReader = cmd.ExecuteReader();
+
+            TrieCompletion tc = new TrieCompletion();
+
+            while (sReader.Read())
+            {
+                string word = sReader["Word"].ToString();
+                int count = Int32.Parse(sReader["UsesCount"].ToString());
+                Console.WriteLine(word + ", " + count);
+                for (int i = 0; i < count; i++)
+                {
+                    tc.Insert(word);
+                }
+            }
+            cnn.Close();
+
+            List<string> completions = tc.FindMostUsedMatches("al");
+
+            Console.WriteLine("\tFinding 'al' completions...");
+            foreach (string c in completions)
+            {
+                Console.WriteLine("\t-" + c);
+            }
+            Console.WriteLine("\t...done.");
         }
     }
 }
