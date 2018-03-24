@@ -16,39 +16,25 @@ namespace WordCompletedNotes
 {
     public partial class MainForm : Form
     {
-        private IComplementarable dictionary;
+        IComplementarable dictionary;
 
-        private float lineHeight;
-        private float fontWidth;
-        private float spaceWidth;
-
-        Point textBoxCorner;
+        ViewFitter view;
 
         AutocompletionForm autoForm;
-        ListBox listBox;
 
-        private bool newStart;
+        bool newStart;
 
-        private string openFile = "";
+        string openFile = "";
 
         public MainForm()
         {
             InitializeComponent();
-            Console.OutputEncoding = Encoding.UTF8;
 
             dictionary = new SimpleCompletion();
+
             autoForm = new AutocompletionForm(this);
 
-            using (Graphics g = textBox.CreateGraphics())
-            {
-                lineHeight = Convert.ToInt32(g.MeasureString("A", textBox.Font).Height);
-                fontWidth = Convert.ToInt32(g.MeasureString("A", textBox.Font).Width);
-                spaceWidth = Convert.ToInt32(g.MeasureString(" ", textBox.Font).Width);
-            }
-
-            textBoxCorner = textBox.Parent.PointToScreen(textBox.Location);
-
-            listBox = autoForm.GetListBox();
+            view = new ViewFitter(autoForm, textBox);
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -71,20 +57,14 @@ namespace WordCompletedNotes
                 case Keys.Down:
                     if (autoForm.Visible)
                     {
-                        if (listBox.SelectedIndex < listBox.Items.Count - 1)
-                        {
-                            listBox.SetSelected(listBox.SelectedIndex + 1, true);
-                        }
+                        autoForm.TrySelectNextItem();
                         e.Handled = true;
                     }
                     break;
                 case Keys.Up:
                     if (autoForm.Visible)
                     {
-                        if (listBox.SelectedIndex > 0)
-                        {
-                            listBox.SetSelected(listBox.SelectedIndex - 1, true);
-                        }
+                        autoForm.TrySelectPreviousItem();
                         e.Handled = true;
                     }
                     break;
@@ -99,7 +79,7 @@ namespace WordCompletedNotes
             string fromBeginToSelection = textBox.Text.Substring(0, textBox.SelectionStart);
             string lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z").Value.ToLower();
 
-            UpdateListBoxPosition();
+            view.UpdateListBoxPosition();
             if (char.IsWhiteSpace(e.KeyChar) || char.IsPunctuation(e.KeyChar) || e.KeyChar == '\n')
             {
                 newStart = true;
@@ -109,18 +89,14 @@ namespace WordCompletedNotes
             {
                 string nextWord = lastWord + e.KeyChar;
 
-                autoForm.Hide();
-                listBox.Items.Clear();
+                autoForm.ClearAndHide();
 
                 if (nextWord != "")
                 {
                     List<string> list = dictionary.FindMostUsedMatches(nextWord.ToLower());
                     if (list.Any())
                     {
-                        int height = (list.Count + 1) * listBox.ItemHeight;
-                        autoForm.Height = listBox.Height = height;
-                        listBox.Items.AddRange(list.ToArray());
-                        autoForm.Show();
+                        view.AdjustAndShowPrompts(list);
                     }
                 }
             }
@@ -137,7 +113,7 @@ namespace WordCompletedNotes
             Match lastWordMatch = Regex.Match(fromBeginToSelection, @"\w+\Z");
             string lastWord = lastWordMatch.Value;
             textBox.Text = textBox.Text.Remove(lastWordMatch.Index, textBox.SelectionStart - lastWordMatch.Index);
-            string wordToInsert = listBox.SelectedItem.ToString();
+            string wordToInsert = autoForm.ListBox.SelectedItem.ToString();
             for (int i = 0; i < lastWord.Length; i++)
             {
                 if (char.IsUpper(lastWord[i]))
@@ -156,39 +132,15 @@ namespace WordCompletedNotes
             return new string(array);
         }
 
-        private void UpdateListBoxPosition()
-        {
-            textBoxCorner = textBox.Parent.PointToScreen(textBox.Location);
-
-            Point cursorPosition = textBox.GetPositionFromCharIndex(textBox.SelectionStart - 1);
-            Point relativeCursorPosition = new Point(cursorPosition.X + textBoxCorner.X + (int)(fontWidth + 1), cursorPosition.Y + textBoxCorner.Y + (int)(lineHeight + 1));
-
-            if (textBox.Text.Length > 0 && (textBox.Text[textBox.Text.Length - 1]) == 10 // ASCII 10 - Line Feed
-                || relativeCursorPosition.X > (textBoxCorner.X + textBox.Width - 28)) // approx. font width + scroll bar width
-            {
-                relativeCursorPosition = new Point(textBoxCorner.X + (int)(fontWidth + 1), relativeCursorPosition.Y + (int)(lineHeight + 1));
-            }
-
-            autoForm.Location = relativeCursorPosition;
-        }
-
-        private float MeasureStringWidth(string text)
-        {
-            using (Graphics g = textBox.CreateGraphics())
-            {
-                return g.MeasureString(text, textBox.Font).Width;
-            }
-        }
-
         private void MainForm_MoveOrResize(object sender, EventArgs e)
         {
-            UpdateListBoxPosition();
+            view.UpdateListBoxPosition();
         }
 
         private void textBox_Click(object sender, EventArgs e)
         {
             autoForm.Hide();
-            UpdateListBoxPosition();
+            view.UpdateListBoxPosition();
         }
 
         private void exitMenu_Click(object sender, EventArgs e)

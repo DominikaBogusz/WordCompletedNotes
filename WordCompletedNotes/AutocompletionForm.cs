@@ -12,7 +12,9 @@ namespace WordCompletedNotes
 {
     public partial class AutocompletionForm : Form
     {
-        private MainForm mainForm;
+        public ListBox ListBox => listBox;
+
+        MainForm mainForm;
 
         public AutocompletionForm(MainForm mf)
         {
@@ -35,11 +37,6 @@ namespace WordCompletedNotes
                 createParams.ExStyle |= WS_EX_TOPMOST;
                 return createParams;
             }
-        }
-
-        public ListBox GetListBox()
-        {
-            return listBox;
         }
 
         private void listBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -85,6 +82,28 @@ namespace WordCompletedNotes
             {
                 mainForm.Focus();
             }
+        }
+
+        public void TrySelectNextItem()
+        {
+            if (listBox.SelectedIndex < listBox.Items.Count - 1)
+            {
+                listBox.SetSelected(listBox.SelectedIndex + 1, true);
+            }
+        }
+
+        public void TrySelectPreviousItem()
+        {
+            if (listBox.SelectedIndex > 0)
+            {
+                listBox.SetSelected(listBox.SelectedIndex - 1, true);
+            }
+        }
+
+        public void ClearAndHide()
+        {
+            listBox.Items.Clear();
+            Hide();
         }
     }
 }
