@@ -22,6 +22,7 @@ namespace WordCompletedNotes
         public WordProcessor WordProcessor { get; private set; }
 
         FileManager fileManager;
+        IStorable storeManager;
 
         AutocompletionForm autoForm;
 
@@ -37,6 +38,8 @@ namespace WordCompletedNotes
             WordProcessor = new WordProcessor();
 
             fileManager = new FileManager();
+
+            storeManager = new DbStorage();
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -152,92 +155,22 @@ namespace WordCompletedNotes
         private void MainForm_Load(object sender, EventArgs e)
         {
             Dictionary<string, int> init = new Dictionary<string, int>();
-            init.Add("alinka", 2); init.Add("wesoła", 1); init.Add("dziewczynka", 1); init.Add("ale", 1); init.Add("ma", 3); init.Add("astmę", 1);
+            init.Add("aluna", 2); init.Add("wesoła", 1); init.Add("dziwuna", 1); init.Add("ale", 1); init.Add("ma", 3); init.Add("astmę", 1);
 
-            OutputTimings(new SimpleCompletion(init));
-            OutputTimings(new TrieCompletion(init));
+            storeManager.SaveWords(new SimpleCompletion(init));
+            IComplementarable trie = new TrieCompletion();
+            storeManager.ReadWords(ref trie);
+            OutputCompletions(trie, "");
+
+            //OutputTimings(new SimpleCompletion(init));
+            //OutputTimings(new TrieCompletion(init));
         }
 
-        private void SaveWordsToTextfile(IComplementarable dictionary)
-        {
-            string path = Application.StartupPath + @"\Words.txt";
-
-            using (FileStream fs = File.Create(path))
-            {
-                Dictionary<string, int> words = dictionary.GetAllWords();
-                for (int i = 0; i < words.Count; i++)
-                {
-                    Byte[] line = new UTF8Encoding(true).GetBytes(words.Keys.ElementAt(i) + ";" + words.Values.ElementAt(i) + "\n");
-                    if (i == words.Count - 1)
-                    {
-                        byte[] tmp = new byte[line.Length - 1];
-                        Array.Copy(line, tmp, line.Length - 1);
-                        line = tmp;
-                    }
-                    fs.Write(line, 0, line.Length);
-                }
-            }
-        }
-
-        private void SaveWordsToDatabase(IComplementarable dictionary)
-        {
-            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath + @"\WordsDatabase.mdf;Integrated Security=True";
-            SqlConnection cnn = new SqlConnection(connetionString);
-            cnn.Open();
-
-            SqlCommand cmdDelete = new SqlCommand("DELETE FROM Words", cnn);
-            cmdDelete.ExecuteNonQuery();
-
-            Dictionary<string, int> words = dictionary.GetAllWords();
-            for (int i = 0; i < words.Count; i++)
-            {
-                SqlCommand cmdInsert = new SqlCommand("INSERT INTO Words (Word,UsesCount) VALUES ('" + words.Keys.ElementAt(i) + "','" + words.Values.ElementAt(i) + "')", cnn);
-                cmdInsert.ExecuteNonQuery();
-            }
-
-            cnn.Close();
-        }
-
-        private void ReadWordsFromTextfile()
-        {
-            string path = Application.StartupPath + @"\Words.txt";
-            if (File.Exists(path) == true)
-            {
-                List<string> lines = File.ReadLines(path).ToList();
-                foreach (string line in lines)
-                {
-                    string[] columns = line.Split(';');
-                    string word = columns[0];
-                    int count = Int32.Parse(columns[1]);
-                    Console.WriteLine(word + ", " + count);
-                }
-
-            }
-        }
-
-        private void ReadWordsFromDatabase()
-        {
-            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath + @"\WordsDatabase.mdf;Integrated Security=True";
-            SqlConnection cnn = new SqlConnection(connetionString);
-            cnn.Open();
-
-            SqlCommand cmdSelect = new SqlCommand("SELECT * FROM Words", cnn);
-            SqlDataReader dataReader = cmdSelect.ExecuteReader();
-
-            while (dataReader.Read())
-            {
-                string word = dataReader["Word"].ToString();
-                int count = Int32.Parse(dataReader["UsesCount"].ToString());
-                Console.WriteLine(word + ", " + count);
-            }
-            cnn.Close();
-        }
-
-        private void OutputReadTime(Action method)
+        private void OutputReadTime(Action<IComplementarable> method, IComplementarable dictionary)
         {
             Console.WriteLine("------" + method.Method + "------");
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            method();
+            method(dictionary);
             var elapsedMs = watch.ElapsedTicks;
             Console.WriteLine(elapsedMs + " ticks");
             Console.WriteLine("------\n");
@@ -265,13 +198,12 @@ namespace WordCompletedNotes
             Console.WriteLine("\t...done.");
         }
 
-        private void OutputTimings(IComplementarable dictionary)
+        private void OutputTimings(IComplementarable dictionary, IStorable storage)
         {
             Console.WriteLine("\t ~~~~~ " + dictionary.GetType() + " ~~~~~ \n");
-            OutputWriteTime(SaveWordsToTextfile, dictionary);
-            OutputWriteTime(SaveWordsToDatabase, dictionary);
-            OutputReadTime(ReadWordsFromTextfile);
-            OutputReadTime(ReadWordsFromDatabase);
+            Console.WriteLine("\t ~~~~~ " + storage.GetType() + " ~~~~~ \n");
+            //OutputWriteTime(storage.SaveWords, dictionary);
+            //OutputReadTime(storage.ReadWords, dictionary);
             Console.WriteLine();
         }
     }

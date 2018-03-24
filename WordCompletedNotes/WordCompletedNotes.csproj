@@ -72,7 +72,9 @@
     <Compile Include="AutocompletionForm.Designer.cs">
       <DependentUpon>AutocompletionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DbStorage.cs" />
     <Compile Include="FileManager.cs" />
+    <Compile Include="IStorable.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +83,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TxtStorage.cs" />
     <Compile Include="ViewFitter.cs" />
     <Compile Include="WordProcessor.cs" />
     <EmbeddedResource Include="AutocompletionForm.resx">
