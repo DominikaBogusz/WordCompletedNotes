@@ -23,6 +23,7 @@ namespace WordCompletedNotes
 
         FileManager fileManager;
         IStorable storeManager;
+        TimeTester timeTester;
 
         AutocompletionForm autoForm;
 
@@ -39,7 +40,7 @@ namespace WordCompletedNotes
 
             fileManager = new FileManager();
 
-            storeManager = new DbStorage();
+            timeTester = new TimeTester();
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -157,54 +158,13 @@ namespace WordCompletedNotes
             Dictionary<string, int> init = new Dictionary<string, int>();
             init.Add("aluna", 2); init.Add("wesoła", 1); init.Add("dziwuna", 1); init.Add("ale", 1); init.Add("ma", 3); init.Add("astmę", 1);
 
-            storeManager.SaveWords(new SimpleCompletion(init));
-            IComplementarable trie = new TrieCompletion();
-            storeManager.ReadWords(ref trie);
-            OutputCompletions(trie, "");
+            storeManager = new TxtStorage();
+            timeTester.OutputTimings(new SimpleCompletion(init), storeManager);
+            timeTester.OutputTimings(new TrieCompletion(init), storeManager);
 
-            //OutputTimings(new SimpleCompletion(init));
-            //OutputTimings(new TrieCompletion(init));
-        }
-
-        private void OutputReadTime(Action<IComplementarable> method, IComplementarable dictionary)
-        {
-            Console.WriteLine("------" + method.Method + "------");
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            method(dictionary);
-            var elapsedMs = watch.ElapsedTicks;
-            Console.WriteLine(elapsedMs + " ticks");
-            Console.WriteLine("------\n");
-        }
-
-        private void OutputWriteTime(Action<IComplementarable> method, IComplementarable dictionary)
-        {
-            Console.WriteLine("------" + method.Method + "------");
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            method(dictionary);
-            var elapsedMs = watch.ElapsedTicks;
-            Console.WriteLine(elapsedMs + " ticks");
-            Console.WriteLine("------\n");
-        }
-
-        private void OutputCompletions(IComplementarable dictionary, string match)
-        {
-            List<string> completions = dictionary.FindMostUsedMatches(match);
-
-            Console.WriteLine("\tFinding '" + match + "' completions...");
-            foreach (string c in completions)
-            {
-                Console.WriteLine("\t-" + c);
-            }
-            Console.WriteLine("\t...done.");
-        }
-
-        private void OutputTimings(IComplementarable dictionary, IStorable storage)
-        {
-            Console.WriteLine("\t ~~~~~ " + dictionary.GetType() + " ~~~~~ \n");
-            Console.WriteLine("\t ~~~~~ " + storage.GetType() + " ~~~~~ \n");
-            //OutputWriteTime(storage.SaveWords, dictionary);
-            //OutputReadTime(storage.ReadWords, dictionary);
-            Console.WriteLine();
+            storeManager = new DbStorage();
+            timeTester.OutputTimings(new SimpleCompletion(init), storeManager);
+            timeTester.OutputTimings(new TrieCompletion(init), storeManager);
         }
     }
 }
