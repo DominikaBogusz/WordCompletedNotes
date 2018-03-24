@@ -18,13 +18,12 @@ namespace WordCompletedNotes
     {
         IComplementarable dictionary;
 
-        ViewFitter view;
+        public ViewFitter View { get; private set; }
+        public WordProcessor WordProcessor { get; private set; }
+
+        FileManager fileManager;
 
         AutocompletionForm autoForm;
-
-        bool newStart;
-
-        string openFile = "";
 
         public MainForm()
         {
@@ -32,9 +31,12 @@ namespace WordCompletedNotes
 
             dictionary = new SimpleCompletion();
 
-            autoForm = new AutocompletionForm(this);
+            autoForm = new AutocompletionForm(this, textBox);
 
-            view = new ViewFitter(autoForm, textBox);
+            View = new ViewFitter(autoForm, autoForm.GetListBox(), textBox);
+            WordProcessor = new WordProcessor();
+
+            fileManager = new FileManager();
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -50,8 +52,6 @@ namespace WordCompletedNotes
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
         {
-            newStart = char.IsControl((char)e.KeyCode) || ((int)e.KeyCode < 41 && (int)e.KeyCode > 36);
-
             switch (e.KeyCode)
             {
                 case Keys.Down:
@@ -76,132 +76,77 @@ namespace WordCompletedNotes
 
         private void textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            string fromBeginToSelection = textBox.Text.Substring(0, textBox.SelectionStart);
-            string lastWord = Regex.Match(fromBeginToSelection, @"\w+\Z").Value.ToLower();
+            View.UpdateListBoxPosition();
 
-            view.UpdateListBoxPosition();
+            string lastWord = WordProcessor.GetLastWordMatch(textBox).Value.ToLower();
+     
             if (char.IsWhiteSpace(e.KeyChar) || char.IsPunctuation(e.KeyChar) || e.KeyChar == '\n')
             {
-                newStart = true;
                 dictionary.Insert(lastWord);
             }
             else
             {
-                string nextWord = lastWord + e.KeyChar;
-
                 autoForm.ClearAndHide();
+
+                string nextWord = lastWord + e.KeyChar;
 
                 if (nextWord != "")
                 {
                     List<string> list = dictionary.FindMostUsedMatches(nextWord.ToLower());
                     if (list.Any())
                     {
-                        view.AdjustAndShowPrompts(list);
+                        View.AdjustAndShowPrompts(list);
                     }
                 }
             }
         }
 
-        private void textBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            newStart = true;
-        }
-
-        public void ChangeEditedWord()
-        {
-            string fromBeginToSelection = textBox.Text.Substring(0, textBox.SelectionStart);
-            Match lastWordMatch = Regex.Match(fromBeginToSelection, @"\w+\Z");
-            string lastWord = lastWordMatch.Value;
-            textBox.Text = textBox.Text.Remove(lastWordMatch.Index, textBox.SelectionStart - lastWordMatch.Index);
-            string wordToInsert = autoForm.ListBox.SelectedItem.ToString();
-            for (int i = 0; i < lastWord.Length; i++)
-            {
-                if (char.IsUpper(lastWord[i]))
-                {
-                    wordToInsert = UpperStringAt(wordToInsert, i);
-                }
-            }
-            textBox.Text = textBox.Text.Insert(lastWordMatch.Index, wordToInsert);
-            textBox.SelectionStart = lastWordMatch.Index + wordToInsert.Length;
-        }
-
-        private string UpperStringAt(string input, int index)
-        {
-            char[] array = input.ToCharArray();
-            array[index] = char.ToUpper(array[index]);
-            return new string(array);
-        }
-
         private void MainForm_MoveOrResize(object sender, EventArgs e)
         {
-            view.UpdateListBoxPosition();
+            View.UpdateListBoxPosition();
         }
 
         private void textBox_Click(object sender, EventArgs e)
         {
             autoForm.Hide();
-            view.UpdateListBoxPosition();
+            View.UpdateListBoxPosition();
+        }
+
+        private void newMenu_Click(object sender, EventArgs e)
+        {
+            textBox.Clear();
+            fileManager.ResetFileName();
+            saveMenu.Enabled = false;
+        }
+
+        private void saveAsMenu_Click(object sender, EventArgs e)
+        {
+            if(fileManager.SaveNewTextFile(textBox.Text) == true)
+            {
+                saveMenu.Enabled = true;
+            }
+        }
+
+        private void saveMenu_Click(object sender, EventArgs e)
+        {
+            if(fileManager.SaveExistingTextFile(textBox.Text) == false)
+            {
+                Console.WriteLine("Something went wrong...");
+            }
+        }
+
+        private void openMenu_Click(object sender, EventArgs e)
+        {
+            if(fileManager.OpenTextFile(textBox) == true)
+            {
+                saveMenu.Enabled = true;
+            }
         }
 
         private void exitMenu_Click(object sender, EventArgs e)
         {
             //Application.Exit();
             Close();
-        }
-
-        private void saveAsMenu_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog.FilterIndex = 1;
-            saveFileDialog.RestoreDirectory = true;
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string path = saveFileDialog.FileName;
-                File.WriteAllText(path, textBox.Text);
-                openFile = path;
-                saveMenu.Enabled = true;
-            }
-        }
-
-        private void openMenu_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string path = openFileDialog.FileName;
-                if (File.Exists(path) == true)
-                {
-                    textBox.Text = File.ReadAllText(openFileDialog.FileName);
-                    openFile = path;
-                    saveMenu.Enabled = true;
-                }
-            }
-        }
-
-        private void saveMenu_Click(object sender, EventArgs e)
-        {
-            if (openFile != "")
-            {
-                if (File.Exists(openFile) == true)
-                {
-                    File.WriteAllText(openFile, textBox.Text);
-                }
-            }
-        }
-
-        private void newMenu_Click(object sender, EventArgs e)
-        {
-            textBox.Clear();
-            openFile = "";
-            saveMenu.Enabled = false;
         }
 
         private void MainForm_Load(object sender, EventArgs e)

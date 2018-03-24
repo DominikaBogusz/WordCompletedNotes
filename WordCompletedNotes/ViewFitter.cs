@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace WordCompletedNotes
 {
-    class ViewFitter
+    public class ViewFitter
     {
         AutocompletionForm autoForm;
         ListBox listBox;
@@ -20,12 +20,12 @@ namespace WordCompletedNotes
         float fontWidth;
         float spaceWidth;
 
-        public ViewFitter(AutocompletionForm af, TextBox tb)
+        public ViewFitter(AutocompletionForm af, ListBox lb, TextBox tb)
         {
             Console.OutputEncoding = Encoding.UTF8;
 
             autoForm = af;
-            listBox = autoForm.ListBox;
+            listBox = lb;
 
             textBox = tb;
 
