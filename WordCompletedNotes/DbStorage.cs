@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ namespace WordCompletedNotes
 {
     class DbStorage : IStorable
     {
-        public void ReadWords(ref IComplementarable dictionary)
+        private string referencedDbFile = Application.StartupPath + @"\WordsDatabase.mdf";
+
+        public void ReadWords(ref IComplementarable dictionary, string sourceFile)
         {
-            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath + @"\WordsDatabase.mdf;Integrated Security=True";
+            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + sourceFile + @";Integrated Security=True";
             SqlConnection cnn = new SqlConnection(connetionString);
             cnn.Open();
 
@@ -29,14 +32,24 @@ namespace WordCompletedNotes
             cnn.Close();
         }
 
-        public void SaveWords(IComplementarable dictionary)
+        public void SaveWords(IComplementarable dictionary, string destFile)
         {
-            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Application.StartupPath + @"\WordsDatabase.mdf;Integrated Security=True";
+            bool isOverwrited = File.Exists(destFile);
+
+            if (!isOverwrited)
+            {
+                File.Copy(referencedDbFile, destFile, false);
+            }
+
+            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + destFile + @";Integrated Security=True";
             SqlConnection cnn = new SqlConnection(connetionString);
             cnn.Open();
 
-            SqlCommand cmdDelete = new SqlCommand("DELETE FROM Words", cnn);
-            cmdDelete.ExecuteNonQuery();
+            if (isOverwrited)
+            {
+                SqlCommand cmdDelete = new SqlCommand("DELETE FROM Words", cnn);
+                cmdDelete.ExecuteNonQuery();
+            }
 
             Dictionary<string, int> words = dictionary.GetAllWords();
             for (int i = 0; i < words.Count; i++)

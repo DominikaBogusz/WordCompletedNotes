@@ -36,6 +36,13 @@
             this.saveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.wordsDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveUsedWordsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.totxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.tomdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -62,9 +69,11 @@
             this.menuStrip.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.wordsDatabaseToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Padding = new System.Windows.Forms.Padding(6, 5, 0, 5);
             this.menuStrip.Size = new System.Drawing.Size(599, 30);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip1";
@@ -125,6 +134,64 @@
             this.exitMenu.Text = "Exit";
             this.exitMenu.Click += new System.EventHandler(this.exitMenu_Click);
             // 
+            // wordsDatabaseToolStripMenuItem
+            // 
+            this.wordsDatabaseToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.wordsDatabaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveUsedWordsMenu,
+            this.openWordsDatabaseMenu});
+            this.wordsDatabaseToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.wordsDatabaseToolStripMenuItem.Name = "wordsDatabaseToolStripMenuItem";
+            this.wordsDatabaseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.W)));
+            this.wordsDatabaseToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
+            this.wordsDatabaseToolStripMenuItem.Text = "&Words Database";
+            // 
+            // saveUsedWordsMenu
+            // 
+            this.saveUsedWordsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.totxtFileMenu,
+            this.tomdfDatabaseMenu});
+            this.saveUsedWordsMenu.Name = "saveUsedWordsMenu";
+            this.saveUsedWordsMenu.Size = new System.Drawing.Size(188, 22);
+            this.saveUsedWordsMenu.Text = "Save used words";
+            // 
+            // totxtFileMenu
+            // 
+            this.totxtFileMenu.Name = "totxtFileMenu";
+            this.totxtFileMenu.Size = new System.Drawing.Size(163, 22);
+            this.totxtFileMenu.Text = "to .txt file";
+            this.totxtFileMenu.Click += new System.EventHandler(this.totxtFileMenu_Click);
+            // 
+            // tomdfDatabaseMenu
+            // 
+            this.tomdfDatabaseMenu.Name = "tomdfDatabaseMenu";
+            this.tomdfDatabaseMenu.Size = new System.Drawing.Size(163, 22);
+            this.tomdfDatabaseMenu.Text = "to .mdf database";
+            this.tomdfDatabaseMenu.Click += new System.EventHandler(this.tomdfDatabaseMenu_Click);
+            // 
+            // openWordsDatabaseMenu
+            // 
+            this.openWordsDatabaseMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fromtxtFileMenu,
+            this.frommdfDatabaseMenu});
+            this.openWordsDatabaseMenu.Name = "openWordsDatabaseMenu";
+            this.openWordsDatabaseMenu.Size = new System.Drawing.Size(188, 22);
+            this.openWordsDatabaseMenu.Text = "Open words database";
+            // 
+            // fromtxtFileMenu
+            // 
+            this.fromtxtFileMenu.Name = "fromtxtFileMenu";
+            this.fromtxtFileMenu.Size = new System.Drawing.Size(178, 22);
+            this.fromtxtFileMenu.Text = "from .txt file";
+            this.fromtxtFileMenu.Click += new System.EventHandler(this.fromtxtFileMenu_Click);
+            // 
+            // frommdfDatabaseMenu
+            // 
+            this.frommdfDatabaseMenu.Name = "frommdfDatabaseMenu";
+            this.frommdfDatabaseMenu.Size = new System.Drawing.Size(178, 22);
+            this.frommdfDatabaseMenu.Text = "from .mdf database";
+            this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
+            // 
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 1;
@@ -151,7 +218,6 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "Autocomplete";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Move += new System.EventHandler(this.MainForm_MoveOrResize);
             this.Resize += new System.EventHandler(this.MainForm_MoveOrResize);
             this.menuStrip.ResumeLayout(false);
@@ -173,6 +239,13 @@
         private System.Windows.Forms.ToolStripMenuItem saveMenu;
         private System.Windows.Forms.ToolStripMenuItem saveAsMenu;
         private System.Windows.Forms.ToolStripMenuItem exitMenu;
+        private System.Windows.Forms.ToolStripMenuItem wordsDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveUsedWordsMenu;
+        private System.Windows.Forms.ToolStripMenuItem totxtFileMenu;
+        private System.Windows.Forms.ToolStripMenuItem tomdfDatabaseMenu;
+        private System.Windows.Forms.ToolStripMenuItem openWordsDatabaseMenu;
+        private System.Windows.Forms.ToolStripMenuItem fromtxtFileMenu;
+        private System.Windows.Forms.ToolStripMenuItem frommdfDatabaseMenu;
     }
 }
 

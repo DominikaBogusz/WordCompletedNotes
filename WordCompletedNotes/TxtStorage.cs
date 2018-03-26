@@ -11,12 +11,11 @@ namespace WordCompletedNotes
 {
     class TxtStorage : IStorable
     {
-        public void ReadWords(ref IComplementarable dictionary)
+        public void ReadWords(ref IComplementarable dictionary, string sourceFile)
         {
-            string path = Application.StartupPath + @"\Words.txt";
-            if (File.Exists(path) == true)
+            if (File.Exists(sourceFile) == true)
             {
-                List<string> lines = File.ReadLines(path).ToList();
+                List<string> lines = File.ReadLines(sourceFile).ToList();
                 foreach (string line in lines)
                 {
                     string[] columns = line.Split(';');
@@ -27,11 +26,9 @@ namespace WordCompletedNotes
             }
         }
 
-        public void SaveWords(IComplementarable dictionary)
+        public void SaveWords(IComplementarable dictionary, string destFile)
         {
-            string path = Application.StartupPath + @"\Words.txt";
-
-            using (FileStream fs = File.Create(path))
+            using (FileStream fs = File.Create(destFile))
             {
                 Dictionary<string, int> words = dictionary.GetAllWords();
                 for (int i = 0; i < words.Count; i++)

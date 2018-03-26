@@ -149,22 +149,49 @@ namespace WordCompletedNotes
 
         private void exitMenu_Click(object sender, EventArgs e)
         {
-            //Application.Exit();
-            Close();
+            Application.Exit();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private void totxtFileMenu_Click(object sender, EventArgs e)
         {
-            Dictionary<string, int> init = new Dictionary<string, int>();
-            init.Add("aluna", 2); init.Add("wesoła", 1); init.Add("dziwuna", 1); init.Add("ale", 1); init.Add("ma", 3); init.Add("astmę", 1);
+            string fileName = fileManager.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
+            if (fileName != "")
+            {
+                new TxtStorage().SaveWords(dictionary, fileName);
+            }
+        }
 
-            storeManager = new TxtStorage();
-            timeTester.OutputTimings(new SimpleCompletion(init), storeManager);
-            timeTester.OutputTimings(new TrieCompletion(init), storeManager);
+        private void tomdfDatabaseMenu_Click(object sender, EventArgs e)
+        {
+            string fileName = fileManager.GetSaveDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
+            if (fileName != "")
+            {
+                new DbStorage().SaveWords(dictionary, fileName);
+            }
+        }
 
-            storeManager = new DbStorage();
-            timeTester.OutputTimings(new SimpleCompletion(init), storeManager);
-            timeTester.OutputTimings(new TrieCompletion(init), storeManager);
+        private void fromtxtFileMenu_Click(object sender, EventArgs e)
+        {
+            string fileName = fileManager.GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
+            if (fileName != "")
+            {
+                new TxtStorage().ReadWords(ref dictionary, fileName);
+            }
+
+            List<string> l = dictionary.FindMostUsedMatches("");
+            foreach(string w in l)
+            {
+                Console.WriteLine(w);
+            }
+        }
+
+        private void frommdfDatabaseMenu_Click(object sender, EventArgs e)
+        {
+            string fileName = fileManager.GetOpenDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
+            if (fileName != "")
+            {
+                new DbStorage().ReadWords(ref dictionary, fileName);
+            }
         }
     }
 }
