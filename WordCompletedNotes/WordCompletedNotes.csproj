@@ -87,6 +87,12 @@
     <Compile Include="TxtStorage.cs" />
     <Compile Include="ViewFitter.cs" />
     <Compile Include="WordProcessor.cs" />
+    <Compile Include="WordsPreviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WordsPreviewForm.Designer.cs">
+      <DependentUpon>WordsPreviewForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AutocompletionForm.resx">
       <DependentUpon>AutocompletionForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -102,6 +108,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="WordsPreviewForm.resx">
+      <DependentUpon>WordsPreviewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\DataSources\IStorable.datasource" />
+    <None Include="Properties\DataSources\WordCompletion.SimpleCompletion.datasource" />
+    <None Include="Properties\DataSources\WordCompletion.TrieCompletion.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

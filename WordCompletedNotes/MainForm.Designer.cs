@@ -37,6 +37,7 @@
             this.saveAsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.wordsDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showUsedWordsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveUsedWordsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.totxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tomdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +63,7 @@
             this.textBox.Click += new System.EventHandler(this.textBox_Click);
             this.textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
             this.textBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
+            this.textBox.MouseHover += new System.EventHandler(this.textBox_MouseHover);
             this.textBox.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textBox_PreviewKeyDown);
             // 
             // menuStrip
@@ -77,6 +79,7 @@
             this.menuStrip.Size = new System.Drawing.Size(599, 30);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip1";
+            this.menuStrip.Click += new System.EventHandler(this.DeactivateAutoForm);
             // 
             // fileToolStripMenuItem
             // 
@@ -89,7 +92,7 @@
             this.exitMenu});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // newMenu
@@ -138,6 +141,7 @@
             // 
             this.wordsDatabaseToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
             this.wordsDatabaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showUsedWordsMenu,
             this.saveUsedWordsMenu,
             this.openWordsDatabaseMenu});
             this.wordsDatabaseToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
@@ -145,6 +149,13 @@
             this.wordsDatabaseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.W)));
             this.wordsDatabaseToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
             this.wordsDatabaseToolStripMenuItem.Text = "&Words Database";
+            // 
+            // showUsedWordsMenu
+            // 
+            this.showUsedWordsMenu.Name = "showUsedWordsMenu";
+            this.showUsedWordsMenu.Size = new System.Drawing.Size(188, 22);
+            this.showUsedWordsMenu.Text = "Show used words";
+            this.showUsedWordsMenu.Click += new System.EventHandler(this.showUsedWordsMenu_Click);
             // 
             // saveUsedWordsMenu
             // 
@@ -207,6 +218,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(599, 341);
             this.tableLayoutPanel.TabIndex = 2;
+            this.tableLayoutPanel.Click += new System.EventHandler(this.DeactivateAutoForm);
             // 
             // MainForm
             // 
@@ -218,6 +230,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "Autocomplete";
+            this.Deactivate += new System.EventHandler(this.DeactivateAutoForm);
             this.Move += new System.EventHandler(this.MainForm_MoveOrResize);
             this.Resize += new System.EventHandler(this.MainForm_MoveOrResize);
             this.menuStrip.ResumeLayout(false);
@@ -246,6 +259,7 @@
         private System.Windows.Forms.ToolStripMenuItem openWordsDatabaseMenu;
         private System.Windows.Forms.ToolStripMenuItem fromtxtFileMenu;
         private System.Windows.Forms.ToolStripMenuItem frommdfDatabaseMenu;
+        private System.Windows.Forms.ToolStripMenuItem showUsedWordsMenu;
     }
 }
 

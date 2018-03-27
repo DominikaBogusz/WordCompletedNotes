@@ -75,18 +75,15 @@ namespace WordCompletedNotes
             mainForm.WordProcessor.ChangeEditedWord(textBox, listBox.SelectedItem.ToString());
         }
 
-        private void AutocompletionForm_MouseClick(object sender, MouseEventArgs e)
+        public void CheckMouseClick(Point point)
         {
-            int index = listBox.IndexFromPoint(e.Location);
+            Point relativePoint = listBox.PointToClient(point);
+            int index = listBox.IndexFromPoint(relativePoint);
             if (index != ListBox.NoMatches)
             {
                 listBox.SetSelected(index, true);
-                Hide();
             }
-            else
-            {
-                mainForm.Focus();
-            }
+            Hide();
         }
 
         public void TrySelectNextItem()

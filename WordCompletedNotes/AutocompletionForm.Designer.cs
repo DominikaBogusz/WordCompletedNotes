@@ -35,11 +35,12 @@
             // 
             this.listBox.BackColor = System.Drawing.SystemColors.Window;
             this.listBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.listBox.Enabled = false;
             this.listBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.listBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.listBox.FormattingEnabled = true;
             this.listBox.HorizontalScrollbar = true;
-            this.listBox.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.listBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.listBox.ItemHeight = 14;
             this.listBox.Location = new System.Drawing.Point(4, 4);
             this.listBox.Margin = new System.Windows.Forms.Padding(0);
@@ -69,7 +70,6 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "AutocompletionForm";
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.AutocompletionForm_MouseClick);
             this.ResumeLayout(false);
 
         }

@@ -22,10 +22,11 @@ namespace WordCompletedNotes
         public WordProcessor WordProcessor { get; private set; }
 
         FileManager fileManager;
-        IStorable storeManager;
         TimeTester timeTester;
 
         AutocompletionForm autoForm;
+
+        WordsPreviewForm wordsPreviewForm;
 
         public MainForm()
         {
@@ -34,6 +35,7 @@ namespace WordCompletedNotes
             dictionary = new SimpleCompletion();
 
             autoForm = new AutocompletionForm(this, textBox);
+            wordsPreviewForm = new WordsPreviewForm();
 
             View = new ViewFitter(autoForm, autoForm.GetListBox(), textBox);
             WordProcessor = new WordProcessor();
@@ -83,7 +85,7 @@ namespace WordCompletedNotes
             View.UpdateListBoxPosition();
 
             string lastWord = WordProcessor.GetLastWordMatch(textBox).Value.ToLower();
-     
+
             if (char.IsWhiteSpace(e.KeyChar) || char.IsPunctuation(e.KeyChar) || e.KeyChar == '\n')
             {
                 dictionary.Insert(lastWord);
@@ -112,8 +114,15 @@ namespace WordCompletedNotes
 
         private void textBox_Click(object sender, EventArgs e)
         {
-            autoForm.Hide();
-            View.UpdateListBoxPosition();
+            if (autoForm.Visible)
+            {
+                autoForm.Hide();
+            }
+        }
+
+        private void textBox_MouseHover(object sender, EventArgs e)
+        {
+            textBox.Focus();
         }
 
         private void newMenu_Click(object sender, EventArgs e)
@@ -191,6 +200,32 @@ namespace WordCompletedNotes
             if (fileName != "")
             {
                 new DbStorage().ReadWords(ref dictionary, fileName);
+            }
+        }
+
+        private void showUsedWordsMenu_Click(object sender, EventArgs e)
+        {
+            wordsPreviewForm.SetDataSource(dictionary.GetAllWords());
+            wordsPreviewForm.ShowDialog();
+        }
+
+        private void DeactivateAutoForm(object sender, EventArgs e)
+        {
+            if (autoForm.Visible)
+            {
+                autoForm.CheckMouseClick(MousePosition);
+            }
+        }
+
+        //detect clicking on title bar
+        const int WM_NCLBUTTONDOWN = 0x00A1;
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            if (m.Msg == WM_NCLBUTTONDOWN)
+            {
+                Cursor = new Cursor(Cursor.Current.Handle);
+                autoForm.ClearAndHide();
             }
         }
     }
