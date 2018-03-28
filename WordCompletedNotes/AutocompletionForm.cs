@@ -44,46 +44,27 @@ namespace WordCompletedNotes
             }
         }
 
-        private void listBox_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
-            e.Graphics.FillRectangle(new SolidBrush(Color.White), e.Bounds);
-            e.DrawFocusRectangle();
-
-            foreach (int selectedIndex in listBox.SelectedIndices)
-            {
-                if (e.Index == selectedIndex)
-                {
-                    e.DrawBackground();
-                    e.Graphics.FillRectangle(new SolidBrush(Color.DeepSkyBlue), e.Bounds);
-                    e.DrawFocusRectangle();
-                }
-            }
-
-            e.Graphics.DrawString(
-                listBox.Items[e.Index].ToString(),
-                listBox.Font,
-                new SolidBrush(Color.Black),
-                0,
-                e.Index * listBox.ItemHeight
-            );
-        }
-
         private void listBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listBox.Invalidate();
+            //listBox.Invalidate();
             mainForm.WordProcessor.ChangeEditedWord(textBox, listBox.SelectedItem.ToString());
+            textBox.Focus();
         }
 
         public void CheckMouseClick(Point point)
         {
-            Point relativePoint = listBox.PointToClient(point);
-            int index = listBox.IndexFromPoint(relativePoint);
-            if (index != ListBox.NoMatches)
-            {
-                listBox.SetSelected(index, true);
-            }
-            Hide();
+            //Point relativePoint = listBox.PointToClient(point);
+            //int index = listBox.IndexFromPoint(relativePoint);
+            //if (index != ListBox.NoMatches)
+            //{
+            //    listBox.SetSelected(index, true);
+            //    Hide();
+            //}
+            //else if(point.X < (this.Location.X) || point.X > (this.Location.X + this.Width)
+            //    || point.Y < (this.Location.Y) || point.Y > (this.Location.Y + this.Height))
+            //{
+            //    Hide();
+            //}
         }
 
         public void TrySelectNextItem()

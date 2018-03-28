@@ -111,9 +111,6 @@
     <EmbeddedResource Include="WordsPreviewForm.resx">
       <DependentUpon>WordsPreviewForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Properties\DataSources\IStorable.datasource" />
-    <None Include="Properties\DataSources\WordCompletion.SimpleCompletion.datasource" />
-    <None Include="Properties\DataSources\WordCompletion.TrieCompletion.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -140,6 +137,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="slowa.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="WordsDatabase.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -28,15 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.trieCompletionBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.iStorableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trieCompletionBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iStorableBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView
@@ -71,14 +66,6 @@
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
             // 
-            // trieCompletionBindingSource
-            // 
-            this.trieCompletionBindingSource.DataSource = typeof(WordCompletion.TrieCompletion);
-            // 
-            // iStorableBindingSource
-            // 
-            this.iStorableBindingSource.DataSource = typeof(WordCompletedNotes.IStorable);
-            // 
             // WordsPreviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -89,8 +76,6 @@
             this.Name = "WordsPreviewForm";
             this.Text = "WordsPreviewForm";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trieCompletionBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iStorableBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -98,7 +83,5 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView;
-        private System.Windows.Forms.BindingSource iStorableBindingSource;
-        private System.Windows.Forms.BindingSource trieCompletionBindingSource;
     }
 }

@@ -16,7 +16,11 @@ namespace WordCompletedNotes
 {
     public partial class MainForm : Form
     {
-        IComplementarable dictionary;
+        IComplementarable completionSource;
+        Dictionary<string, int> wordsFromDictionary;
+        IComplementarable wordsFromUser;
+
+        bool usingDictionary = false;
 
         public ViewFitter View { get; private set; }
         public WordProcessor WordProcessor { get; private set; }
@@ -32,7 +36,9 @@ namespace WordCompletedNotes
         {
             InitializeComponent();
 
-            dictionary = new SimpleCompletion();
+            completionSource = new SimpleCompletion();
+            wordsFromDictionary = new Dictionary<string, int>();
+            wordsFromUser = new SimpleCompletion();
 
             autoForm = new AutocompletionForm(this, textBox);
             wordsPreviewForm = new WordsPreviewForm();
@@ -88,7 +94,11 @@ namespace WordCompletedNotes
 
             if (char.IsWhiteSpace(e.KeyChar) || char.IsPunctuation(e.KeyChar) || e.KeyChar == '\n')
             {
-                dictionary.Insert(lastWord);
+                completionSource.Insert(lastWord);
+                if (usingDictionary)
+                {
+                    wordsFromUser.Insert(lastWord);
+                }
             }
             else
             {
@@ -98,7 +108,7 @@ namespace WordCompletedNotes
 
                 if (nextWord != "")
                 {
-                    List<string> list = dictionary.FindMostUsedMatches(nextWord.ToLower());
+                    List<string> list = completionSource.FindMostUsedMatches(nextWord.ToLower());
                     if (list.Any())
                     {
                         View.AdjustAndShowPrompts(list);
@@ -166,7 +176,7 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new TxtStorage().SaveWords(dictionary, fileName);
+                new TxtStorage().SaveWords(wordsFromUser, fileName);
             }
         }
 
@@ -175,7 +185,7 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetSaveDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new DbStorage().SaveWords(dictionary, fileName);
+                new DbStorage().SaveWords(wordsFromUser, fileName);
             }
         }
 
@@ -184,10 +194,10 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new TxtStorage().ReadWords(ref dictionary, fileName);
+                new TxtStorage().ReadWords(ref wordsFromUser, fileName);
             }
 
-            List<string> l = dictionary.FindMostUsedMatches("");
+            List<string> l = wordsFromUser.FindMostUsedMatches("");
             foreach(string w in l)
             {
                 Console.WriteLine(w);
@@ -199,22 +209,19 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetOpenDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new DbStorage().ReadWords(ref dictionary, fileName);
+                new DbStorage().ReadWords(ref wordsFromUser, fileName);
             }
         }
 
         private void showUsedWordsMenu_Click(object sender, EventArgs e)
         {
-            wordsPreviewForm.SetDataSource(dictionary.GetAllWords());
+            wordsPreviewForm.SetDataSource(wordsFromUser.GetAllWords());
             wordsPreviewForm.ShowDialog();
         }
 
         private void DeactivateAutoForm(object sender, EventArgs e)
         {
-            if (autoForm.Visible)
-            {
-                autoForm.CheckMouseClick(MousePosition);
-            }
+            autoForm.ClearAndHide();
         }
 
         //detect clicking on title bar
@@ -226,6 +233,36 @@ namespace WordCompletedNotes
             {
                 Cursor = new Cursor(Cursor.Current.Handle);
                 autoForm.ClearAndHide();
+            }
+        }
+
+        private void useDictionaryPLMenu_CheckedChanged(object sender, EventArgs e)
+        {
+            if(useDictionaryPLMenu.Checked == true)
+            {
+                usingDictionary = true;
+                wordsFromUser = new SimpleCompletion(completionSource.GetAllWords());
+                if(wordsFromDictionary.Count == 0)
+                {
+                    string dictionaryFile = Application.StartupPath + @"\slowa.txt";
+                    if (File.Exists(dictionaryFile) == true)
+                    {
+                        foreach (string word in File.ReadLines(dictionaryFile))
+                        {
+                            wordsFromDictionary.Add(word, 1);
+                        }
+                    }
+                }
+                completionSource = new SimpleCompletion(wordsFromDictionary);
+                foreach(var word in wordsFromUser.GetAllWords())
+                {
+                    completionSource.Insert(word.Key, word.Value);
+                }
+            }
+            else
+            {
+                usingDictionary = false;
+                completionSource = new SimpleCompletion(wordsFromUser.GetAllWords());
             }
         }
     }

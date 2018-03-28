@@ -44,6 +44,7 @@
             this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -143,7 +144,8 @@
             this.wordsDatabaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showUsedWordsMenu,
             this.saveUsedWordsMenu,
-            this.openWordsDatabaseMenu});
+            this.openWordsDatabaseMenu,
+            this.useDictionaryPLMenu});
             this.wordsDatabaseToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.wordsDatabaseToolStripMenuItem.Name = "wordsDatabaseToolStripMenuItem";
             this.wordsDatabaseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.W)));
@@ -203,6 +205,14 @@
             this.frommdfDatabaseMenu.Text = "from .mdf database";
             this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
             // 
+            // useDictionaryPLMenu
+            // 
+            this.useDictionaryPLMenu.CheckOnClick = true;
+            this.useDictionaryPLMenu.Name = "useDictionaryPLMenu";
+            this.useDictionaryPLMenu.Size = new System.Drawing.Size(188, 22);
+            this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
+            this.useDictionaryPLMenu.CheckedChanged += new System.EventHandler(this.useDictionaryPLMenu_CheckedChanged);
+            // 
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 1;
@@ -260,6 +270,7 @@
         private System.Windows.Forms.ToolStripMenuItem fromtxtFileMenu;
         private System.Windows.Forms.ToolStripMenuItem frommdfDatabaseMenu;
         private System.Windows.Forms.ToolStripMenuItem showUsedWordsMenu;
+        private System.Windows.Forms.ToolStripMenuItem useDictionaryPLMenu;
     }
 }
 

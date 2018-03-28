@@ -34,8 +34,6 @@
             // listBox
             // 
             this.listBox.BackColor = System.Drawing.SystemColors.Window;
-            this.listBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.listBox.Enabled = false;
             this.listBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.listBox.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.listBox.FormattingEnabled = true;
@@ -49,7 +47,6 @@
             this.listBox.Size = new System.Drawing.Size(128, 144);
             this.listBox.TabIndex = 3;
             this.listBox.TabStop = false;
-            this.listBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_DrawItem);
             this.listBox.SelectedIndexChanged += new System.EventHandler(this.listBox_SelectedIndexChanged);
             // 
             // AutocompletionForm
@@ -61,9 +58,9 @@
             this.ClientSize = new System.Drawing.Size(136, 152);
             this.ControlBox = false;
             this.Controls.Add(this.listBox);
-            this.Enabled = false;
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MaximumSize = new System.Drawing.Size(136, 152);
             this.Name = "AutocompletionForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
