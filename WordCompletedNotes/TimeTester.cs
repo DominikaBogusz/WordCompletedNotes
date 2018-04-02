@@ -45,7 +45,7 @@ namespace WordCompletedNotes
         {
             Console.WriteLine("\t ~~ " + dictionary.GetType() + " ~~ ");
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            List<string> completions = dictionary.FindMostUsedMatches(match);
+            List<string> completions = dictionary.FindMostUsedMatchesList(match);
             var elapsedMs = watch.ElapsedTicks;
             Console.WriteLine("\tFinding '" + match + "' completions...");
             foreach (string c in completions)

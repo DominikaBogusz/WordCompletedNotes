@@ -7,7 +7,7 @@ using WordCompletion;
 
 namespace WordCompletedNotes
 {
-    interface IStorable
+    public interface IStorable
     {
         void ReadWords(ref IComplementarable dictionary, string sourceFile);
         void SaveWords(IComplementarable dictionary, string destFile);

@@ -72,6 +72,7 @@
     <Compile Include="AutocompletionForm.Designer.cs">
       <DependentUpon>AutocompletionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CompletionController.cs" />
     <Compile Include="DbStorage.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="IStorable.cs" />

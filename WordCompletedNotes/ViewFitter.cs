@@ -41,10 +41,13 @@ namespace WordCompletedNotes
 
         public void AdjustAndShowPrompts(List<string> list)
         {
-            int height = (list.Count + 1) * listBox.ItemHeight;
-            autoForm.Height = listBox.Height = height;
-            listBox.Items.AddRange(list.ToArray());
-            autoForm.Show();
+            if (list.Any())
+            {
+                int height = (list.Count + 1) * listBox.ItemHeight;
+                autoForm.Height = listBox.Height = height;
+                listBox.Items.AddRange(list.ToArray());
+                autoForm.Show();
+            }
         }
 
         public void UpdateListBoxPosition()
