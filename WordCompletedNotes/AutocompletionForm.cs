@@ -15,6 +15,8 @@ namespace WordCompletedNotes
         MainForm mainForm;
         TextBox textBox;
 
+        bool listBoxClicked = false;
+
         public AutocompletionForm(MainForm mf, TextBox tb)
         {
             InitializeComponent();
@@ -46,25 +48,8 @@ namespace WordCompletedNotes
 
         private void listBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //listBox.Invalidate();
             mainForm.WordProcessor.ChangeEditedWord(textBox, listBox.SelectedItem.ToString());
             textBox.Focus();
-        }
-
-        public void CheckMouseClick(Point point)
-        {
-            //Point relativePoint = listBox.PointToClient(point);
-            //int index = listBox.IndexFromPoint(relativePoint);
-            //if (index != ListBox.NoMatches)
-            //{
-            //    listBox.SetSelected(index, true);
-            //    Hide();
-            //}
-            //else if(point.X < (this.Location.X) || point.X > (this.Location.X + this.Width)
-            //    || point.Y < (this.Location.Y) || point.Y > (this.Location.Y + this.Height))
-            //{
-            //    Hide();
-            //}
         }
 
         public void TrySelectNextItem()
@@ -87,6 +72,25 @@ namespace WordCompletedNotes
         {
             listBox.Items.Clear();
             Hide();
+        }
+
+        private void listBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            listBoxClicked = true;
+        }
+
+        public void CheckMouseClick(Point point)
+        {
+            if (listBoxClicked)
+            {
+                Point relativePoint = listBox.PointToClient(point);
+                int index = listBox.IndexFromPoint(relativePoint);
+                if (index != ListBox.NoMatches)
+                {
+                    listBox.SetSelected(index, true);
+                }
+                listBoxClicked = false;
+            }
         }
     }
 }

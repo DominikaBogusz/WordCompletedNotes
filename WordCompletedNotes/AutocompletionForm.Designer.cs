@@ -48,6 +48,7 @@
             this.listBox.TabIndex = 3;
             this.listBox.TabStop = false;
             this.listBox.SelectedIndexChanged += new System.EventHandler(this.listBox_SelectedIndexChanged);
+            this.listBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox_MouseDown);
             // 
             // AutocompletionForm
             // 

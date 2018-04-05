@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WordCompletion;
@@ -203,6 +204,8 @@ namespace WordCompletedNotes
 
         private void DeactivateAutoForm(object sender, EventArgs e)
         {
+            autoForm.CheckMouseClick(MousePosition);
+            Thread.Sleep(50);
             autoForm.ClearAndHide();
         }
 
