@@ -12,7 +12,8 @@ namespace WordCompletedNotes
     public enum CompletionType
     {
         SIMPLE,
-        TRIE
+        TRIE,
+        HEAPTRIE
     }
 
     public class CompletionController
@@ -35,6 +36,10 @@ namespace WordCompletedNotes
                 case CompletionType.TRIE:
                     completionSource = new TrieCompletion();
                     wordsFromUser = new TrieCompletion();
+                    break;
+                case CompletionType.HEAPTRIE:
+                    completionSource = new HeapTrieCompletion();
+                    wordsFromUser = new HeapTrieCompletion();
                     break;
             }
 

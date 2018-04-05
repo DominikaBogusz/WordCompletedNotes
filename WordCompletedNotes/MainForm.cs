@@ -33,7 +33,7 @@ namespace WordCompletedNotes
         {
             InitializeComponent();
 
-            completion = new CompletionController(CompletionType.SIMPLE);
+            completion = new CompletionController(CompletionType.HEAPTRIE);
 
             autoForm = new AutocompletionForm(this, textBox);
             wordsPreviewForm = new WordsPreviewForm();
