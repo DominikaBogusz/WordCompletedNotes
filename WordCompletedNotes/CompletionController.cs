@@ -25,7 +25,7 @@ namespace WordCompletedNotes
         Dictionary<string, int> wordsFromDictionary = new Dictionary<string, int>();
         bool usingDictionary = false;
 
-        public CompletionController(CompletionType completionType, Dictionary<string, int> initialWords = null)
+        public CompletionController(CompletionType completionType, Dictionary<string, int> initialWords = null, bool useDictionary = false)
         {
             switch (completionType)
             {
@@ -46,6 +46,11 @@ namespace WordCompletedNotes
             if (initialWords != null)
             {
                 completionSource.InsertWordsDictionary(initialWords);
+            }
+
+            if (useDictionary)
+            {
+                UseDictionary(true);
             }
         }
 

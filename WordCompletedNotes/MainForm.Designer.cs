@@ -44,8 +44,13 @@
             this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.autocompletionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.algorithmMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.algSimpleMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.algTrieMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.algTrieHeapMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -73,7 +78,8 @@
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.wordsDatabaseToolStripMenuItem});
+            this.wordsDatabaseToolStripMenuItem,
+            this.autocompletionToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(6, 5, 0, 5);
@@ -144,8 +150,7 @@
             this.wordsDatabaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showUsedWordsMenu,
             this.saveUsedWordsMenu,
-            this.openWordsDatabaseMenu,
-            this.useDictionaryPLMenu});
+            this.openWordsDatabaseMenu});
             this.wordsDatabaseToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.wordsDatabaseToolStripMenuItem.Name = "wordsDatabaseToolStripMenuItem";
             this.wordsDatabaseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.W)));
@@ -205,14 +210,6 @@
             this.frommdfDatabaseMenu.Text = "from .mdf database";
             this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
             // 
-            // useDictionaryPLMenu
-            // 
-            this.useDictionaryPLMenu.CheckOnClick = true;
-            this.useDictionaryPLMenu.Name = "useDictionaryPLMenu";
-            this.useDictionaryPLMenu.Size = new System.Drawing.Size(188, 22);
-            this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
-            this.useDictionaryPLMenu.CheckedChanged += new System.EventHandler(this.useDictionaryPLMenu_CheckedChanged);
-            // 
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 1;
@@ -229,6 +226,61 @@
             this.tableLayoutPanel.Size = new System.Drawing.Size(599, 341);
             this.tableLayoutPanel.TabIndex = 2;
             this.tableLayoutPanel.Click += new System.EventHandler(this.DeactivateAutoForm);
+            // 
+            // autocompletionToolStripMenuItem
+            // 
+            this.autocompletionToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.autocompletionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.algorithmMenu,
+            this.useDictionaryPLMenu});
+            this.autocompletionToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.autocompletionToolStripMenuItem.Name = "autocompletionToolStripMenuItem";
+            this.autocompletionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.autocompletionToolStripMenuItem.Size = new System.Drawing.Size(106, 20);
+            this.autocompletionToolStripMenuItem.Text = "&Autocompletion";
+            // 
+            // algorithmMenu
+            // 
+            this.algorithmMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.algSimpleMenu,
+            this.algTrieMenu,
+            this.algTrieHeapMenu});
+            this.algorithmMenu.Name = "algorithmMenu";
+            this.algorithmMenu.Size = new System.Drawing.Size(173, 22);
+            this.algorithmMenu.Text = "Algorithm";
+            // 
+            // useDictionaryPLMenu
+            // 
+            this.useDictionaryPLMenu.CheckOnClick = true;
+            this.useDictionaryPLMenu.Name = "useDictionaryPLMenu";
+            this.useDictionaryPLMenu.Size = new System.Drawing.Size(173, 22);
+            this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
+            // 
+            // algSimpleMenu
+            // 
+            this.algSimpleMenu.Checked = true;
+            this.algSimpleMenu.CheckOnClick = true;
+            this.algSimpleMenu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.algSimpleMenu.Name = "algSimpleMenu";
+            this.algSimpleMenu.Size = new System.Drawing.Size(152, 22);
+            this.algSimpleMenu.Text = "Simple";
+            this.algSimpleMenu.Click += new System.EventHandler(this.algSimpleMenu_Click);
+            // 
+            // algTrieMenu
+            // 
+            this.algTrieMenu.CheckOnClick = true;
+            this.algTrieMenu.Name = "algTrieMenu";
+            this.algTrieMenu.Size = new System.Drawing.Size(152, 22);
+            this.algTrieMenu.Text = "Trie";
+            this.algTrieMenu.Click += new System.EventHandler(this.algTrieMenu_Click);
+            // 
+            // algTrieHeapMenu
+            // 
+            this.algTrieHeapMenu.CheckOnClick = true;
+            this.algTrieHeapMenu.Name = "algTrieHeapMenu";
+            this.algTrieHeapMenu.Size = new System.Drawing.Size(152, 22);
+            this.algTrieHeapMenu.Text = "Trie with Heap";
+            this.algTrieHeapMenu.Click += new System.EventHandler(this.algTrieHeapMenu_Click);
             // 
             // MainForm
             // 
@@ -270,6 +322,11 @@
         private System.Windows.Forms.ToolStripMenuItem fromtxtFileMenu;
         private System.Windows.Forms.ToolStripMenuItem frommdfDatabaseMenu;
         private System.Windows.Forms.ToolStripMenuItem showUsedWordsMenu;
+        private System.Windows.Forms.ToolStripMenuItem autocompletionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem algorithmMenu;
+        private System.Windows.Forms.ToolStripMenuItem algSimpleMenu;
+        private System.Windows.Forms.ToolStripMenuItem algTrieMenu;
+        private System.Windows.Forms.ToolStripMenuItem algTrieHeapMenu;
         private System.Windows.Forms.ToolStripMenuItem useDictionaryPLMenu;
     }
 }

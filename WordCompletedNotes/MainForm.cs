@@ -34,7 +34,7 @@ namespace WordCompletedNotes
         {
             InitializeComponent();
 
-            completion = new CompletionController(CompletionType.HEAPTRIE);
+            completion = new CompletionController(CompletionType.SIMPLE);
 
             autoForm = new AutocompletionForm(this, textBox);
             wordsPreviewForm = new WordsPreviewForm();
@@ -224,6 +224,51 @@ namespace WordCompletedNotes
         private void useDictionaryPLMenu_CheckedChanged(object sender, EventArgs e)
         {
             completion.UseDictionary(useDictionaryPLMenu.Checked);
+        }
+
+        private void algSimpleMenu_Click(object sender, EventArgs e)
+        {
+            if (algSimpleMenu.Checked)
+            {
+                Dictionary<string, int> usedWords = new Dictionary<string, int>(completion.GetUsedWords());
+                completion = new CompletionController(CompletionType.SIMPLE, usedWords, useDictionaryPLMenu.Checked);
+                algTrieMenu.Checked = false;
+                algTrieHeapMenu.Checked = false;
+            }
+            else
+            {
+                algSimpleMenu.Checked = true;
+            }
+        }
+
+        private void algTrieMenu_Click(object sender, EventArgs e)
+        {
+            if (algTrieMenu.Checked)
+            {
+                Dictionary<string, int> usedWords = new Dictionary<string, int>(completion.GetUsedWords());
+                completion = new CompletionController(CompletionType.TRIE, usedWords, useDictionaryPLMenu.Checked);
+                algSimpleMenu.Checked = false;
+                algTrieHeapMenu.Checked = false;
+            }
+            else
+            {
+                algTrieMenu.Checked = true;
+            }
+        }
+
+        private void algTrieHeapMenu_Click(object sender, EventArgs e)
+        {
+            if (algTrieHeapMenu.Checked)
+            {
+                Dictionary<string, int> usedWords = new Dictionary<string, int>(completion.GetUsedWords());
+                completion = new CompletionController(CompletionType.HEAPTRIE, usedWords, useDictionaryPLMenu.Checked);
+                algSimpleMenu.Checked = false;
+                algTrieMenu.Checked = false;
+            }
+            else
+            {
+                algTrieHeapMenu.Checked = true;
+            }
         }
     }
 }
