@@ -25,7 +25,9 @@ namespace WordCompletedNotes
         Dictionary<string, int> wordsFromDictionary = new Dictionary<string, int>();
         bool usingDictionary = false;
 
-        public CompletionController(CompletionType completionType, Dictionary<string, int> initialWords = null, bool useDictionary = false)
+        bool sortingByUsesCount = true;
+
+        public CompletionController(CompletionType completionType, Dictionary<string, int> initialWords = null, bool useDictionary = false, bool sortByUsesCount = true)
         {
             switch (completionType)
             {
@@ -52,6 +54,8 @@ namespace WordCompletedNotes
             {
                 UseDictionary(true);
             }
+
+            sortingByUsesCount = sortByUsesCount;
         }
 
         public void InsertWord(string word)
@@ -63,15 +67,32 @@ namespace WordCompletedNotes
             }
         }
 
-        public List<string> GetListOfMostUsedWords(string word)
+        public Dictionary<string, int> GetWords(string prefix)
         {
-            return completionSource.FindMostUsedMatchesList(word.ToLower());
+            if (sortingByUsesCount)
+            {
+                return GetMostUsedWords(prefix);
+            }
+            else
+            {
+                return GetUnorderedWords(prefix);
+            }
+        }
+
+        private Dictionary<string, int> GetUnorderedWords(string prefix)
+        {
+            return completionSource.FindMatches(prefix.ToLower());
+        }
+
+        private Dictionary<string, int> GetMostUsedWords(string prefix)
+        {
+            return completionSource.FindMostUsedMatches(prefix.ToLower());
         }
 
         public void UseDictionary(bool enable)
         {
             usingDictionary = enable;
-            
+
             if (enable)
             {
                 wordsFromUser.ResetWordsDictionary(completionSource.GetAllWords());
@@ -86,6 +107,11 @@ namespace WordCompletedNotes
                 completionSource.Clear();
                 completionSource.InsertWordsDictionary(wordsFromUser.GetAllWords());
             }
+        }
+
+        public void SortByUsesCount(bool enable)
+        {
+            sortingByUsesCount = enable;
         }
 
         public Dictionary<string, int> GetUsedWords()

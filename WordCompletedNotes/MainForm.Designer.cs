@@ -44,13 +44,14 @@
             this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.autocompletionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.algorithmMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.algSimpleMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.algTrieMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.algTrieHeapMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.sortByUsesCountMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -78,8 +79,8 @@
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.wordsDatabaseToolStripMenuItem,
-            this.autocompletionToolStripMenuItem});
+            this.autocompletionToolStripMenuItem,
+            this.wordsDatabaseToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(6, 5, 0, 5);
@@ -210,28 +211,12 @@
             this.frommdfDatabaseMenu.Text = "from .mdf database";
             this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
             // 
-            // tableLayoutPanel
-            // 
-            this.tableLayoutPanel.ColumnCount = 1;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.textBox, 0, 1);
-            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 3;
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(599, 341);
-            this.tableLayoutPanel.TabIndex = 2;
-            this.tableLayoutPanel.Click += new System.EventHandler(this.DeactivateAutoForm);
-            // 
             // autocompletionToolStripMenuItem
             // 
             this.autocompletionToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
             this.autocompletionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.algorithmMenu,
+            this.sortByUsesCountMenu,
             this.useDictionaryPLMenu});
             this.autocompletionToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.autocompletionToolStripMenuItem.Name = "autocompletionToolStripMenuItem";
@@ -249,6 +234,29 @@
             this.algorithmMenu.Size = new System.Drawing.Size(173, 22);
             this.algorithmMenu.Text = "Algorithm";
             // 
+            // algSimpleMenu
+            // 
+            this.algSimpleMenu.Checked = true;
+            this.algSimpleMenu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.algSimpleMenu.Name = "algSimpleMenu";
+            this.algSimpleMenu.Size = new System.Drawing.Size(150, 22);
+            this.algSimpleMenu.Text = "Simple";
+            this.algSimpleMenu.Click += new System.EventHandler(this.algSimpleMenu_Click);
+            // 
+            // algTrieMenu
+            // 
+            this.algTrieMenu.Name = "algTrieMenu";
+            this.algTrieMenu.Size = new System.Drawing.Size(150, 22);
+            this.algTrieMenu.Text = "Trie";
+            this.algTrieMenu.Click += new System.EventHandler(this.algTrieMenu_Click);
+            // 
+            // algTrieHeapMenu
+            // 
+            this.algTrieHeapMenu.Name = "algTrieHeapMenu";
+            this.algTrieHeapMenu.Size = new System.Drawing.Size(150, 22);
+            this.algTrieHeapMenu.Text = "Trie with Heap";
+            this.algTrieHeapMenu.Click += new System.EventHandler(this.algTrieHeapMenu_Click);
+            // 
             // useDictionaryPLMenu
             // 
             this.useDictionaryPLMenu.CheckOnClick = true;
@@ -256,31 +264,32 @@
             this.useDictionaryPLMenu.Size = new System.Drawing.Size(173, 22);
             this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
             // 
-            // algSimpleMenu
+            // tableLayoutPanel
             // 
-            this.algSimpleMenu.Checked = true;
-            this.algSimpleMenu.CheckOnClick = true;
-            this.algSimpleMenu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.algSimpleMenu.Name = "algSimpleMenu";
-            this.algSimpleMenu.Size = new System.Drawing.Size(152, 22);
-            this.algSimpleMenu.Text = "Simple";
-            this.algSimpleMenu.Click += new System.EventHandler(this.algSimpleMenu_Click);
+            this.tableLayoutPanel.ColumnCount = 1;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
+            this.tableLayoutPanel.Controls.Add(this.textBox, 0, 1);
+            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 3;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(599, 341);
+            this.tableLayoutPanel.TabIndex = 2;
+            this.tableLayoutPanel.Click += new System.EventHandler(this.DeactivateAutoForm);
             // 
-            // algTrieMenu
+            // sortByUsesCountMenu
             // 
-            this.algTrieMenu.CheckOnClick = true;
-            this.algTrieMenu.Name = "algTrieMenu";
-            this.algTrieMenu.Size = new System.Drawing.Size(152, 22);
-            this.algTrieMenu.Text = "Trie";
-            this.algTrieMenu.Click += new System.EventHandler(this.algTrieMenu_Click);
-            // 
-            // algTrieHeapMenu
-            // 
-            this.algTrieHeapMenu.CheckOnClick = true;
-            this.algTrieHeapMenu.Name = "algTrieHeapMenu";
-            this.algTrieHeapMenu.Size = new System.Drawing.Size(152, 22);
-            this.algTrieHeapMenu.Text = "Trie with Heap";
-            this.algTrieHeapMenu.Click += new System.EventHandler(this.algTrieHeapMenu_Click);
+            this.sortByUsesCountMenu.Checked = true;
+            this.sortByUsesCountMenu.CheckOnClick = true;
+            this.sortByUsesCountMenu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sortByUsesCountMenu.Name = "sortByUsesCountMenu";
+            this.sortByUsesCountMenu.Size = new System.Drawing.Size(173, 22);
+            this.sortByUsesCountMenu.Text = "Sort by uses count";
+            this.sortByUsesCountMenu.Click += new System.EventHandler(this.sortByUsesCountMenu_Click);
             // 
             // MainForm
             // 
@@ -328,6 +337,7 @@
         private System.Windows.Forms.ToolStripMenuItem algTrieMenu;
         private System.Windows.Forms.ToolStripMenuItem algTrieHeapMenu;
         private System.Windows.Forms.ToolStripMenuItem useDictionaryPLMenu;
+        private System.Windows.Forms.ToolStripMenuItem sortByUsesCountMenu;
     }
 }
 

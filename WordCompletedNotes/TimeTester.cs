@@ -45,10 +45,10 @@ namespace WordCompletedNotes
         {
             Console.WriteLine("\t ~~ " + dictionary.GetType() + " ~~ ");
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            List<string> completions = dictionary.FindMostUsedMatchesList(match);
+            Dictionary<string, int> completions = dictionary.FindMostUsedMatches(match);
             var elapsedMs = watch.ElapsedTicks;
             Console.WriteLine("\tFinding '" + match + "' completions...");
-            foreach (string c in completions)
+            foreach (string c in completions.Keys)
             {
                 Console.WriteLine("\t-" + c);
             }

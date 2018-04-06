@@ -100,7 +100,7 @@ namespace WordCompletedNotes
 
                 if (nextWord != "")
                 {
-                    promptsList = completion.GetListOfMostUsedWords(nextWord);
+                    promptsList = completion.GetWords(nextWord).Keys.ToList();
                     View.AdjustAndShowPrompts(promptsList);
                 }
             }
@@ -228,47 +228,40 @@ namespace WordCompletedNotes
 
         private void algSimpleMenu_Click(object sender, EventArgs e)
         {
-            if (algSimpleMenu.Checked)
+            if (!algSimpleMenu.Checked)
             {
-                Dictionary<string, int> usedWords = new Dictionary<string, int>(completion.GetUsedWords());
-                completion = new CompletionController(CompletionType.SIMPLE, usedWords, useDictionaryPLMenu.Checked);
+                completion = new CompletionController(CompletionType.SIMPLE, completion.GetUsedWords(), useDictionaryPLMenu.Checked, sortByUsesCountMenu.Checked);
+                algSimpleMenu.Checked = true;
                 algTrieMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
-            }
-            else
-            {
-                algSimpleMenu.Checked = true;
             }
         }
 
         private void algTrieMenu_Click(object sender, EventArgs e)
         {
-            if (algTrieMenu.Checked)
+            if (!algTrieMenu.Checked)
             {
-                Dictionary<string, int> usedWords = new Dictionary<string, int>(completion.GetUsedWords());
-                completion = new CompletionController(CompletionType.TRIE, usedWords, useDictionaryPLMenu.Checked);
+                completion = new CompletionController(CompletionType.TRIE, completion.GetUsedWords(), useDictionaryPLMenu.Checked, sortByUsesCountMenu.Checked);
+                algTrieMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
-            }
-            else
-            {
-                algTrieMenu.Checked = true;
             }
         }
 
         private void algTrieHeapMenu_Click(object sender, EventArgs e)
         {
-            if (algTrieHeapMenu.Checked)
+            if (!algTrieHeapMenu.Checked)
             {
-                Dictionary<string, int> usedWords = new Dictionary<string, int>(completion.GetUsedWords());
-                completion = new CompletionController(CompletionType.HEAPTRIE, usedWords, useDictionaryPLMenu.Checked);
+                completion = new CompletionController(CompletionType.HEAPTRIE, completion.GetUsedWords(), useDictionaryPLMenu.Checked, sortByUsesCountMenu.Checked);
+                algTrieHeapMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieMenu.Checked = false;
             }
-            else
-            {
-                algTrieHeapMenu.Checked = true;
-            }
+        }
+
+        private void sortByUsesCountMenu_Click(object sender, EventArgs e)
+        {
+            completion.SortByUsesCount(sortByUsesCountMenu.Checked);
         }
     }
 }
