@@ -80,6 +80,7 @@
             this.dictSmallCB.TabIndex = 3;
             this.dictSmallCB.Text = "small (500 random words)";
             this.dictSmallCB.UseVisualStyleBackColor = true;
+            this.dictSmallCB.CheckedChanged += new System.EventHandler(this.dictSelectionChange);
             // 
             // dictMediumCB
             // 
@@ -90,6 +91,7 @@
             this.dictMediumCB.TabIndex = 4;
             this.dictMediumCB.Text = "medium (10000 random words)";
             this.dictMediumCB.UseVisualStyleBackColor = true;
+            this.dictMediumCB.CheckedChanged += new System.EventHandler(this.dictSelectionChange);
             // 
             // dictLargeCB
             // 
@@ -100,6 +102,7 @@
             this.dictLargeCB.TabIndex = 5;
             this.dictLargeCB.Text = "large (over 2000000 words from dictionary)";
             this.dictLargeCB.UseVisualStyleBackColor = true;
+            this.dictLargeCB.CheckedChanged += new System.EventHandler(this.dictSelectionChange);
             // 
             // insertSingleCB
             // 
@@ -110,6 +113,7 @@
             this.insertSingleCB.TabIndex = 6;
             this.insertSingleCB.Text = "Insert single word";
             this.insertSingleCB.UseVisualStyleBackColor = true;
+            this.insertSingleCB.CheckedChanged += new System.EventHandler(this.funcSelectionChange);
             // 
             // dictSizeLabel
             // 
@@ -138,6 +142,7 @@
             this.insertDictCB.TabIndex = 9;
             this.insertDictCB.Text = "Insert dictionary";
             this.insertDictCB.UseVisualStyleBackColor = true;
+            this.insertDictCB.CheckedChanged += new System.EventHandler(this.funcSelectionChange);
             // 
             // findAllCB
             // 
@@ -148,6 +153,7 @@
             this.findAllCB.TabIndex = 10;
             this.findAllCB.Text = "Find matches (all)";
             this.findAllCB.UseVisualStyleBackColor = true;
+            this.findAllCB.CheckedChanged += new System.EventHandler(this.funcSelectionChange);
             // 
             // find10CB
             // 
@@ -158,26 +164,29 @@
             this.find10CB.TabIndex = 11;
             this.find10CB.Text = "Find matches (10)";
             this.find10CB.UseVisualStyleBackColor = true;
+            this.find10CB.CheckedChanged += new System.EventHandler(this.funcSelectionChange);
             // 
             // findMostUsedAllCB
             // 
             this.findMostUsedAllCB.AutoSize = true;
-            this.findMostUsedAllCB.Location = new System.Drawing.Point(93, 203);
+            this.findMostUsedAllCB.Location = new System.Drawing.Point(93, 227);
             this.findMostUsedAllCB.Name = "findMostUsedAllCB";
             this.findMostUsedAllCB.Size = new System.Drawing.Size(159, 17);
             this.findMostUsedAllCB.TabIndex = 12;
             this.findMostUsedAllCB.Text = "Find most used matches (all)";
             this.findMostUsedAllCB.UseVisualStyleBackColor = true;
+            this.findMostUsedAllCB.CheckedChanged += new System.EventHandler(this.funcSelectionChange);
             // 
             // findMostUsed10CB
             // 
             this.findMostUsed10CB.AutoSize = true;
-            this.findMostUsed10CB.Location = new System.Drawing.Point(93, 226);
+            this.findMostUsed10CB.Location = new System.Drawing.Point(93, 204);
             this.findMostUsed10CB.Name = "findMostUsed10CB";
             this.findMostUsed10CB.Size = new System.Drawing.Size(161, 17);
             this.findMostUsed10CB.TabIndex = 13;
             this.findMostUsed10CB.Text = "Find most used matches (10)";
             this.findMostUsed10CB.UseVisualStyleBackColor = true;
+            this.findMostUsed10CB.CheckedChanged += new System.EventHandler(this.funcSelectionChange);
             // 
             // repetitionsLabel
             // 
@@ -191,6 +200,11 @@
             // repetitionsNumericUpDown
             // 
             this.repetitionsNumericUpDown.Location = new System.Drawing.Point(93, 250);
+            this.repetitionsNumericUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.repetitionsNumericUpDown.Name = "repetitionsNumericUpDown";
             this.repetitionsNumericUpDown.Size = new System.Drawing.Size(120, 20);
             this.repetitionsNumericUpDown.TabIndex = 15;
@@ -212,6 +226,7 @@
             this.saveButton.TabIndex = 16;
             this.saveButton.Text = "Save tests output to the file...";
             this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // TestForm
             // 
