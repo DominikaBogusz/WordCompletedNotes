@@ -23,12 +23,13 @@ namespace WordCompletedNotes
         public WordProcessor WordProcessor { get; private set; }
 
         FileManager fileManager;
-        TimeTester timeTester;
 
         AutocompletionForm autoForm;
         List<string> promptsList;
 
         WordsPreviewForm wordsPreviewForm;
+
+        TestForm testForm;
 
         public MainForm()
         {
@@ -43,8 +44,6 @@ namespace WordCompletedNotes
             WordProcessor = new WordProcessor();
 
             fileManager = new FileManager();
-
-            timeTester = new TimeTester();
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -262,6 +261,12 @@ namespace WordCompletedNotes
         private void sortByUsesCountMenu_Click(object sender, EventArgs e)
         {
             completion.SortByUsesCount(sortByUsesCountMenu.Checked);
+        }
+
+        private void testsLibraryTimingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            testForm = new TestForm();
+            testForm.ShowDialog();
         }
     }
 }

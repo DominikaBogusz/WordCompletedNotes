@@ -36,6 +36,13 @@
             this.saveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.autocompletionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.algorithmMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.algSimpleMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.algTrieMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.algTrieHeapMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortByUsesCountMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.wordsDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showUsedWordsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveUsedWordsMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,14 +51,9 @@
             this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.autocompletionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.algorithmMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.algSimpleMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.algTrieMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.algTrieHeapMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.sortByUsesCountMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.testsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testsLibraryTimingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +82,8 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.autocompletionToolStripMenuItem,
-            this.wordsDatabaseToolStripMenuItem});
+            this.wordsDatabaseToolStripMenuItem,
+            this.testsToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(6, 5, 0, 5);
@@ -144,6 +147,69 @@
             this.exitMenu.Size = new System.Drawing.Size(193, 22);
             this.exitMenu.Text = "Exit";
             this.exitMenu.Click += new System.EventHandler(this.exitMenu_Click);
+            // 
+            // autocompletionToolStripMenuItem
+            // 
+            this.autocompletionToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.autocompletionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.algorithmMenu,
+            this.sortByUsesCountMenu,
+            this.useDictionaryPLMenu});
+            this.autocompletionToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.autocompletionToolStripMenuItem.Name = "autocompletionToolStripMenuItem";
+            this.autocompletionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.autocompletionToolStripMenuItem.Size = new System.Drawing.Size(106, 20);
+            this.autocompletionToolStripMenuItem.Text = "&Autocompletion";
+            // 
+            // algorithmMenu
+            // 
+            this.algorithmMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.algSimpleMenu,
+            this.algTrieMenu,
+            this.algTrieHeapMenu});
+            this.algorithmMenu.Name = "algorithmMenu";
+            this.algorithmMenu.Size = new System.Drawing.Size(173, 22);
+            this.algorithmMenu.Text = "Algorithm";
+            // 
+            // algSimpleMenu
+            // 
+            this.algSimpleMenu.Checked = true;
+            this.algSimpleMenu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.algSimpleMenu.Name = "algSimpleMenu";
+            this.algSimpleMenu.Size = new System.Drawing.Size(150, 22);
+            this.algSimpleMenu.Text = "Simple";
+            this.algSimpleMenu.Click += new System.EventHandler(this.algSimpleMenu_Click);
+            // 
+            // algTrieMenu
+            // 
+            this.algTrieMenu.Name = "algTrieMenu";
+            this.algTrieMenu.Size = new System.Drawing.Size(150, 22);
+            this.algTrieMenu.Text = "Trie";
+            this.algTrieMenu.Click += new System.EventHandler(this.algTrieMenu_Click);
+            // 
+            // algTrieHeapMenu
+            // 
+            this.algTrieHeapMenu.Name = "algTrieHeapMenu";
+            this.algTrieHeapMenu.Size = new System.Drawing.Size(150, 22);
+            this.algTrieHeapMenu.Text = "Trie with Heap";
+            this.algTrieHeapMenu.Click += new System.EventHandler(this.algTrieHeapMenu_Click);
+            // 
+            // sortByUsesCountMenu
+            // 
+            this.sortByUsesCountMenu.Checked = true;
+            this.sortByUsesCountMenu.CheckOnClick = true;
+            this.sortByUsesCountMenu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sortByUsesCountMenu.Name = "sortByUsesCountMenu";
+            this.sortByUsesCountMenu.Size = new System.Drawing.Size(173, 22);
+            this.sortByUsesCountMenu.Text = "Sort by uses count";
+            this.sortByUsesCountMenu.Click += new System.EventHandler(this.sortByUsesCountMenu_Click);
+            // 
+            // useDictionaryPLMenu
+            // 
+            this.useDictionaryPLMenu.CheckOnClick = true;
+            this.useDictionaryPLMenu.Name = "useDictionaryPLMenu";
+            this.useDictionaryPLMenu.Size = new System.Drawing.Size(173, 22);
+            this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
             // 
             // wordsDatabaseToolStripMenuItem
             // 
@@ -211,59 +277,6 @@
             this.frommdfDatabaseMenu.Text = "from .mdf database";
             this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
             // 
-            // autocompletionToolStripMenuItem
-            // 
-            this.autocompletionToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.autocompletionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.algorithmMenu,
-            this.sortByUsesCountMenu,
-            this.useDictionaryPLMenu});
-            this.autocompletionToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.autocompletionToolStripMenuItem.Name = "autocompletionToolStripMenuItem";
-            this.autocompletionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
-            this.autocompletionToolStripMenuItem.Size = new System.Drawing.Size(106, 20);
-            this.autocompletionToolStripMenuItem.Text = "&Autocompletion";
-            // 
-            // algorithmMenu
-            // 
-            this.algorithmMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.algSimpleMenu,
-            this.algTrieMenu,
-            this.algTrieHeapMenu});
-            this.algorithmMenu.Name = "algorithmMenu";
-            this.algorithmMenu.Size = new System.Drawing.Size(173, 22);
-            this.algorithmMenu.Text = "Algorithm";
-            // 
-            // algSimpleMenu
-            // 
-            this.algSimpleMenu.Checked = true;
-            this.algSimpleMenu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.algSimpleMenu.Name = "algSimpleMenu";
-            this.algSimpleMenu.Size = new System.Drawing.Size(150, 22);
-            this.algSimpleMenu.Text = "Simple";
-            this.algSimpleMenu.Click += new System.EventHandler(this.algSimpleMenu_Click);
-            // 
-            // algTrieMenu
-            // 
-            this.algTrieMenu.Name = "algTrieMenu";
-            this.algTrieMenu.Size = new System.Drawing.Size(150, 22);
-            this.algTrieMenu.Text = "Trie";
-            this.algTrieMenu.Click += new System.EventHandler(this.algTrieMenu_Click);
-            // 
-            // algTrieHeapMenu
-            // 
-            this.algTrieHeapMenu.Name = "algTrieHeapMenu";
-            this.algTrieHeapMenu.Size = new System.Drawing.Size(150, 22);
-            this.algTrieHeapMenu.Text = "Trie with Heap";
-            this.algTrieHeapMenu.Click += new System.EventHandler(this.algTrieHeapMenu_Click);
-            // 
-            // useDictionaryPLMenu
-            // 
-            this.useDictionaryPLMenu.CheckOnClick = true;
-            this.useDictionaryPLMenu.Name = "useDictionaryPLMenu";
-            this.useDictionaryPLMenu.Size = new System.Drawing.Size(173, 22);
-            this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
-            // 
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 1;
@@ -281,15 +294,23 @@
             this.tableLayoutPanel.TabIndex = 2;
             this.tableLayoutPanel.Click += new System.EventHandler(this.DeactivateAutoForm);
             // 
-            // sortByUsesCountMenu
+            // testsToolStripMenuItem
             // 
-            this.sortByUsesCountMenu.Checked = true;
-            this.sortByUsesCountMenu.CheckOnClick = true;
-            this.sortByUsesCountMenu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sortByUsesCountMenu.Name = "sortByUsesCountMenu";
-            this.sortByUsesCountMenu.Size = new System.Drawing.Size(173, 22);
-            this.sortByUsesCountMenu.Text = "Sort by uses count";
-            this.sortByUsesCountMenu.Click += new System.EventHandler(this.sortByUsesCountMenu_Click);
+            this.testsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.testsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testsLibraryTimingsToolStripMenuItem});
+            this.testsToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.testsToolStripMenuItem.Name = "testsToolStripMenuItem";
+            this.testsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
+            this.testsToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.testsToolStripMenuItem.Text = "&Tests";
+            // 
+            // testsLibraryTimingsToolStripMenuItem
+            // 
+            this.testsLibraryTimingsToolStripMenuItem.Name = "testsLibraryTimingsToolStripMenuItem";
+            this.testsLibraryTimingsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.testsLibraryTimingsToolStripMenuItem.Text = "Tests library timings";
+            this.testsLibraryTimingsToolStripMenuItem.Click += new System.EventHandler(this.testsLibraryTimingsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -338,6 +359,8 @@
         private System.Windows.Forms.ToolStripMenuItem algTrieHeapMenu;
         private System.Windows.Forms.ToolStripMenuItem useDictionaryPLMenu;
         private System.Windows.Forms.ToolStripMenuItem sortByUsesCountMenu;
+        private System.Windows.Forms.ToolStripMenuItem testsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testsLibraryTimingsToolStripMenuItem;
     }
 }
 
