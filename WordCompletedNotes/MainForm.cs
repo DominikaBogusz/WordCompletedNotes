@@ -136,6 +136,10 @@ namespace WordCompletedNotes
             {
                 saveMenu.Enabled = true;
             }
+            else
+            {
+                Console.WriteLine("Something went wrong...");
+            }
         }
 
         private void saveMenu_Click(object sender, EventArgs e)
