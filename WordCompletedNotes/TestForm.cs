@@ -57,68 +57,15 @@ namespace WordCompletedNotes
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            string output = "";
-
-            IComplementarable completion = GetTestDictionary(algComboBox.SelectedItem.ToString());
-            output += completion.GetType() + "\n";
-
+            TestPrinter testPrinter = new TestPrinter(algComboBox.SelectedItem.ToString());
             int repetitions = (int)repetitionsNumericUpDown.Value;
-
             if (insertSingleCB.Checked)
             {
-                output += TestInsertSimple(completion, repetitions);
+                testPrinter.InsertSimple(repetitions);
             }
-
-            new FileManager().SaveNewTextFile(output);
+            new FileManager().SaveNewTextFile(testPrinter.Output);
+            MessageBox.Show("Results of tests has been saved!");
         }
 
-        string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        Random random = new Random();
-
-        private string GenerateRandomString(int min, int max)
-        {
-            char[] stringChars = new char[random.Next(min, max)];
-            for (int i = 0; i < stringChars.Length; i++)
-            {
-                stringChars[i] = chars[random.Next(chars.Length)];
-            }
-            return new string(stringChars);
-        }
-
-        private IComplementarable GetTestDictionary(string algName)
-        {
-            switch (algName)
-            {
-                case "Simple":
-                    return new SimpleCompletion();
-                case "Trie":
-                    return new TrieCompletion();
-                case "HeapTrie":
-                    return new HeapTrieCompletion();
-                default:
-                    throw new Exception("Something went wrong...");
-            }
-        }
-
-        private string TestInsertSimple(IComplementarable completion, int times)
-        {
-            string output = "Inserting single word" + "\n";
-            output += "word" + "\t" + "word length" + "\t" + "time (ticks)" + "\n";
-            for (int i = 0; i < times; i++)
-            {
-                string randomWord = GenerateRandomString(3, 8).ToLower();
-                output += randomWord + "\t" + randomWord.Length + "\t";
-                long execTime = MeasureInsertSingleTime(completion, randomWord);
-                output += execTime + "\n";
-            }
-            return output;
-        }
-
-        private long MeasureInsertSingleTime(IComplementarable completion, string word)
-        {
-            System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
-            completion.Insert(word);
-            return watch.ElapsedTicks;
-        }
     }
 }
