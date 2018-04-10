@@ -51,9 +51,9 @@
             this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.testsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testsLibraryTimingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -210,6 +210,7 @@
             this.useDictionaryPLMenu.Name = "useDictionaryPLMenu";
             this.useDictionaryPLMenu.Size = new System.Drawing.Size(173, 22);
             this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
+            this.useDictionaryPLMenu.CheckedChanged += new System.EventHandler(this.useDictionaryPLMenu_CheckedChanged);
             // 
             // wordsDatabaseToolStripMenuItem
             // 
@@ -277,23 +278,6 @@
             this.frommdfDatabaseMenu.Text = "from .mdf database";
             this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
             // 
-            // tableLayoutPanel
-            // 
-            this.tableLayoutPanel.ColumnCount = 1;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.textBox, 0, 1);
-            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 3;
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(599, 341);
-            this.tableLayoutPanel.TabIndex = 2;
-            this.tableLayoutPanel.Click += new System.EventHandler(this.DeactivateAutoForm);
-            // 
             // testsToolStripMenuItem
             // 
             this.testsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -311,6 +295,23 @@
             this.testsLibraryTimingsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.testsLibraryTimingsToolStripMenuItem.Text = "Tests library timings";
             this.testsLibraryTimingsToolStripMenuItem.Click += new System.EventHandler(this.testsLibraryTimingsToolStripMenuItem_Click);
+            // 
+            // tableLayoutPanel
+            // 
+            this.tableLayoutPanel.ColumnCount = 1;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
+            this.tableLayoutPanel.Controls.Add(this.textBox, 0, 1);
+            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 3;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(599, 341);
+            this.tableLayoutPanel.TabIndex = 2;
+            this.tableLayoutPanel.Click += new System.EventHandler(this.DeactivateAutoForm);
             // 
             // MainForm
             // 

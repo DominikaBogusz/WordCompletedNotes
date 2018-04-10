@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="CompletionController.cs" />
     <Compile Include="DbStorage.cs" />
+    <Compile Include="DictionaryFromTxt.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="IStorable.cs" />
     <Compile Include="MainForm.cs">

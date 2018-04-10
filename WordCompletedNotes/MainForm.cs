@@ -89,7 +89,7 @@ namespace WordCompletedNotes
 
             if (char.IsWhiteSpace(e.KeyChar) || char.IsPunctuation(e.KeyChar) || e.KeyChar == '\n')
             {
-                completion.InsertWord(lastWord);
+                if(lastWord != "") completion.InsertWord(lastWord);
             }
             else
             {

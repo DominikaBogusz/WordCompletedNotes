@@ -17,7 +17,6 @@ namespace WordCompletedNotes
         IComplementarable completionSource;
         IComplementarable wordsFromUser;
 
-        string dictionaryFile = Application.StartupPath + @"\slowa.txt";
         Dictionary<string, int> wordsFromDictionary = new Dictionary<string, int>();
         bool usingDictionary = false;
 
@@ -94,7 +93,7 @@ namespace WordCompletedNotes
                 wordsFromUser.ResetWordsDictionary(completionSource.GetAllWords());
                 if (wordsFromDictionary.Count <= 0)
                 {
-                    ReadWordsFromDictionaryFile(wordsFromDictionary);
+                    wordsFromDictionary = new DictionaryFromTxt().Dictionary;
                 }
                 completionSource.InsertWordsDictionary(wordsFromDictionary);
             }
@@ -117,17 +116,6 @@ namespace WordCompletedNotes
                 return wordsFromUser.GetAllWords();
             }
             return completionSource.GetAllWords();
-        }
-
-        private void ReadWordsFromDictionaryFile(Dictionary<string, int> dictionary)
-        {
-            if (File.Exists(dictionaryFile) == true)
-            {
-                foreach (string word in File.ReadLines(dictionaryFile))
-                {
-                    dictionary.Add(word, 1);
-                }
-            }
         }
 
         public void SaveWords(IStorable storage, string fileName)
