@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WordCompletion;
+using System.Diagnostics;
 
 namespace WordCompletedNotes
 {
@@ -35,8 +36,16 @@ namespace WordCompletedNotes
 
         public long InsertSingle(string word)
         {
-            System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+            Stopwatch watch = Stopwatch.StartNew();
             testedCompletion.Insert(word);
+            return watch.ElapsedTicks;
+        }
+
+        public long InsertDictionary(Dictionary<string, int> dict)
+        {
+            testedCompletion.Clear();
+            Stopwatch watch = Stopwatch.StartNew();
+            testedCompletion.InsertWordsDictionary(dict);
             return watch.ElapsedTicks;
         }
     }

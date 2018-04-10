@@ -13,9 +13,6 @@ namespace WordCompletedNotes
 {
     public partial class TestForm : Form
     {
-        bool dictSelected = false;
-        bool funcSelected = false;
-
         public TestForm()
         {
             InitializeComponent();
@@ -23,49 +20,46 @@ namespace WordCompletedNotes
             algComboBox.SelectedIndex = 0;
         }
 
-
-        private void dictSelectionChange(object sender, EventArgs e)
-        {
-            dictSelected = dictSmallCB.Checked || dictMediumCB.Checked || dictLargeCB.Checked;
-
-            CheckIfEnableButon();
-        }
-
         private void funcSelectionChange(object sender, EventArgs e)
         {
-            funcSelected = insertDictCB.Checked || find10CB.Checked || findAllCB.Checked
+            saveButton.Enabled = insertSingleCB.Checked || insertDictCB.Checked
+                || find10CB.Checked || findAllCB.Checked
                 || findMostUsed10CB.Checked || findMostUsedAllCB.Checked;
-
-            CheckIfEnableButon();
-        }
-
-        private void CheckIfEnableButon()
-        {
-            if (insertSingleCB.Checked && !funcSelected)
-            {
-                saveButton.Enabled = true;
-            }
-            else if (dictSelected && funcSelected)
-            {
-                saveButton.Enabled = true;
-            }
-            else
-            {
-                saveButton.Enabled = false;
-            }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            TestPrinter testPrinter = new TestPrinter(algComboBox.SelectedItem.ToString());
-            int repetitions = (int)repetitionsNumericUpDown.Value;
+            int dictSize = GetDictSize();
+
+            TestPrinter testPrinter = new TestPrinter(algComboBox.SelectedItem.ToString(),
+                                      (int)repetitionsNumericUpDown.Value, dictSize);
+
             if (insertSingleCB.Checked)
             {
-                testPrinter.InsertSimple(repetitions);
+                testPrinter.InsertSimple();
+            }
+            if (insertDictCB.Checked)
+            {
+                testPrinter.InsertDictionary();
             }
             new FileManager().SaveNewTextFile(testPrinter.Output);
             MessageBox.Show("Results of tests has been saved!");
         }
 
+        private int GetDictSize()
+        {
+            if (dictSmallRB.Checked)
+            {
+                return 500;
+            }
+            else if (dictMediumRB.Checked)
+            {
+                return 10000;
+            }
+            else
+            {
+                return 2000000;
+            }
+        }
     }
 }

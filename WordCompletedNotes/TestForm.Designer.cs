@@ -30,9 +30,6 @@
         {
             this.algLabel = new System.Windows.Forms.Label();
             this.algComboBox = new System.Windows.Forms.ComboBox();
-            this.dictSmallCB = new System.Windows.Forms.CheckBox();
-            this.dictMediumCB = new System.Windows.Forms.CheckBox();
-            this.dictLargeCB = new System.Windows.Forms.CheckBox();
             this.insertSingleCB = new System.Windows.Forms.CheckBox();
             this.dictSizeLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,7 +41,12 @@
             this.repetitionsLabel = new System.Windows.Forms.Label();
             this.repetitionsNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.saveButton = new System.Windows.Forms.Button();
+            this.dictSmallRB = new System.Windows.Forms.RadioButton();
+            this.dictMediumRB = new System.Windows.Forms.RadioButton();
+            this.dictLargeRB = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.repetitionsNumericUpDown)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // algLabel
@@ -66,48 +68,15 @@
             "Simple",
             "Trie",
             "HeapTrie"});
-            this.algComboBox.Location = new System.Drawing.Point(93, 15);
+            this.algComboBox.Location = new System.Drawing.Point(93, 12);
             this.algComboBox.Name = "algComboBox";
             this.algComboBox.Size = new System.Drawing.Size(226, 21);
             this.algComboBox.TabIndex = 2;
             // 
-            // dictSmallCB
-            // 
-            this.dictSmallCB.AutoSize = true;
-            this.dictSmallCB.Location = new System.Drawing.Point(93, 42);
-            this.dictSmallCB.Name = "dictSmallCB";
-            this.dictSmallCB.Size = new System.Drawing.Size(145, 17);
-            this.dictSmallCB.TabIndex = 3;
-            this.dictSmallCB.Text = "small (500 random words)";
-            this.dictSmallCB.UseVisualStyleBackColor = true;
-            this.dictSmallCB.CheckedChanged += new System.EventHandler(this.dictSelectionChange);
-            // 
-            // dictMediumCB
-            // 
-            this.dictMediumCB.AutoSize = true;
-            this.dictMediumCB.Location = new System.Drawing.Point(93, 65);
-            this.dictMediumCB.Name = "dictMediumCB";
-            this.dictMediumCB.Size = new System.Drawing.Size(170, 17);
-            this.dictMediumCB.TabIndex = 4;
-            this.dictMediumCB.Text = "medium (10000 random words)";
-            this.dictMediumCB.UseVisualStyleBackColor = true;
-            this.dictMediumCB.CheckedChanged += new System.EventHandler(this.dictSelectionChange);
-            // 
-            // dictLargeCB
-            // 
-            this.dictLargeCB.AutoSize = true;
-            this.dictLargeCB.Location = new System.Drawing.Point(93, 88);
-            this.dictLargeCB.Name = "dictLargeCB";
-            this.dictLargeCB.Size = new System.Drawing.Size(226, 17);
-            this.dictLargeCB.TabIndex = 5;
-            this.dictLargeCB.Text = "large (over 2000000 words from dictionary)";
-            this.dictLargeCB.UseVisualStyleBackColor = true;
-            this.dictLargeCB.CheckedChanged += new System.EventHandler(this.dictSelectionChange);
-            // 
             // insertSingleCB
             // 
             this.insertSingleCB.AutoSize = true;
-            this.insertSingleCB.Location = new System.Drawing.Point(93, 111);
+            this.insertSingleCB.Location = new System.Drawing.Point(93, 110);
             this.insertSingleCB.Name = "insertSingleCB";
             this.insertSingleCB.Size = new System.Drawing.Size(108, 17);
             this.insertSingleCB.TabIndex = 6;
@@ -136,7 +105,7 @@
             // insertDictCB
             // 
             this.insertDictCB.AutoSize = true;
-            this.insertDictCB.Location = new System.Drawing.Point(93, 134);
+            this.insertDictCB.Location = new System.Drawing.Point(93, 133);
             this.insertDictCB.Name = "insertDictCB";
             this.insertDictCB.Size = new System.Drawing.Size(100, 17);
             this.insertDictCB.TabIndex = 9;
@@ -147,7 +116,7 @@
             // findAllCB
             // 
             this.findAllCB.AutoSize = true;
-            this.findAllCB.Location = new System.Drawing.Point(93, 180);
+            this.findAllCB.Location = new System.Drawing.Point(93, 179);
             this.findAllCB.Name = "findAllCB";
             this.findAllCB.Size = new System.Drawing.Size(108, 17);
             this.findAllCB.TabIndex = 10;
@@ -158,7 +127,7 @@
             // find10CB
             // 
             this.find10CB.AutoSize = true;
-            this.find10CB.Location = new System.Drawing.Point(93, 157);
+            this.find10CB.Location = new System.Drawing.Point(93, 156);
             this.find10CB.Name = "find10CB";
             this.find10CB.Size = new System.Drawing.Size(110, 17);
             this.find10CB.TabIndex = 11;
@@ -169,7 +138,7 @@
             // findMostUsedAllCB
             // 
             this.findMostUsedAllCB.AutoSize = true;
-            this.findMostUsedAllCB.Location = new System.Drawing.Point(93, 227);
+            this.findMostUsedAllCB.Location = new System.Drawing.Point(93, 225);
             this.findMostUsedAllCB.Name = "findMostUsedAllCB";
             this.findMostUsedAllCB.Size = new System.Drawing.Size(159, 17);
             this.findMostUsedAllCB.TabIndex = 12;
@@ -180,7 +149,7 @@
             // findMostUsed10CB
             // 
             this.findMostUsed10CB.AutoSize = true;
-            this.findMostUsed10CB.Location = new System.Drawing.Point(93, 204);
+            this.findMostUsed10CB.Location = new System.Drawing.Point(93, 202);
             this.findMostUsed10CB.Name = "findMostUsed10CB";
             this.findMostUsed10CB.Size = new System.Drawing.Size(161, 17);
             this.findMostUsed10CB.TabIndex = 13;
@@ -228,6 +197,55 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
+            // dictSmallRB
+            // 
+            this.dictSmallRB.AutoSize = true;
+            this.dictSmallRB.Checked = true;
+            this.dictSmallRB.Location = new System.Drawing.Point(81, 1);
+            this.dictSmallRB.Name = "dictSmallRB";
+            this.dictSmallRB.Size = new System.Drawing.Size(144, 17);
+            this.dictSmallRB.TabIndex = 17;
+            this.dictSmallRB.TabStop = true;
+            this.dictSmallRB.Tag = "";
+            this.dictSmallRB.Text = "small (500 random words)";
+            this.dictSmallRB.UseVisualStyleBackColor = true;
+            // 
+            // dictMediumRB
+            // 
+            this.dictMediumRB.AccessibleDescription = "";
+            this.dictMediumRB.AutoSize = true;
+            this.dictMediumRB.Location = new System.Drawing.Point(81, 24);
+            this.dictMediumRB.Name = "dictMediumRB";
+            this.dictMediumRB.Size = new System.Drawing.Size(169, 17);
+            this.dictMediumRB.TabIndex = 18;
+            this.dictMediumRB.TabStop = true;
+            this.dictMediumRB.Tag = "";
+            this.dictMediumRB.Text = "medium (10000 random words)";
+            this.dictMediumRB.UseVisualStyleBackColor = true;
+            // 
+            // dictLargeRB
+            // 
+            this.dictLargeRB.AccessibleDescription = "";
+            this.dictLargeRB.AutoSize = true;
+            this.dictLargeRB.Location = new System.Drawing.Point(81, 45);
+            this.dictLargeRB.Name = "dictLargeRB";
+            this.dictLargeRB.Size = new System.Drawing.Size(225, 17);
+            this.dictLargeRB.TabIndex = 19;
+            this.dictLargeRB.TabStop = true;
+            this.dictLargeRB.Tag = "";
+            this.dictLargeRB.Text = "large (over 2000000 words from dictionary)";
+            this.dictLargeRB.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.dictLargeRB);
+            this.panel1.Controls.Add(this.dictSmallRB);
+            this.panel1.Controls.Add(this.dictMediumRB);
+            this.panel1.Location = new System.Drawing.Point(12, 39);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(308, 65);
+            this.panel1.TabIndex = 20;
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -245,17 +263,17 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dictSizeLabel);
             this.Controls.Add(this.insertSingleCB);
-            this.Controls.Add(this.dictLargeCB);
-            this.Controls.Add(this.dictMediumCB);
-            this.Controls.Add(this.dictSmallCB);
             this.Controls.Add(this.algLabel);
             this.Controls.Add(this.algComboBox);
+            this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximumSize = new System.Drawing.Size(348, 359);
             this.MinimumSize = new System.Drawing.Size(348, 359);
             this.Name = "TestForm";
             this.Text = "Test Library Speed";
             ((System.ComponentModel.ISupportInitialize)(this.repetitionsNumericUpDown)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -264,9 +282,6 @@
         #endregion
         private System.Windows.Forms.Label algLabel;
         private System.Windows.Forms.ComboBox algComboBox;
-        private System.Windows.Forms.CheckBox dictSmallCB;
-        private System.Windows.Forms.CheckBox dictMediumCB;
-        private System.Windows.Forms.CheckBox dictLargeCB;
         private System.Windows.Forms.CheckBox insertSingleCB;
         private System.Windows.Forms.Label dictSizeLabel;
         private System.Windows.Forms.Label label1;
@@ -278,5 +293,9 @@
         private System.Windows.Forms.Label repetitionsLabel;
         private System.Windows.Forms.NumericUpDown repetitionsNumericUpDown;
         private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.RadioButton dictSmallRB;
+        private System.Windows.Forms.RadioButton dictMediumRB;
+        private System.Windows.Forms.RadioButton dictLargeRB;
+        private System.Windows.Forms.Panel panel1;
     }
 }
