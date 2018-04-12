@@ -48,5 +48,21 @@ namespace WordCompletedNotes
             testedCompletion.InsertWordsDictionary(dict);
             return watch.ElapsedTicks;
         }
+
+        public long FindMatches(string prefix, int max = 0)
+        {
+            testedCompletion.Clear();
+            Stopwatch watch = Stopwatch.StartNew();
+            testedCompletion.FindMatches(prefix, max);
+            return watch.ElapsedTicks;
+        }
+
+        public long FindMostUsedMatches(string prefix, int max = 0)
+        {
+            testedCompletion.Clear();
+            Stopwatch watch = Stopwatch.StartNew();
+            testedCompletion.FindMostUsedMatches(prefix, max);
+            return watch.ElapsedTicks;
+        }
     }
 }

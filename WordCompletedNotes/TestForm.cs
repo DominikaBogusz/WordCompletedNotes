@@ -36,14 +36,33 @@ namespace WordCompletedNotes
 
             if (insertSingleCB.Checked)
             {
-                testPrinter.InsertSimple();
+                testPrinter.InsertSingle();
             }
             if (insertDictCB.Checked)
             {
                 testPrinter.InsertDictionary();
             }
-            new FileManager().SaveNewTextFile(testPrinter.Output);
-            MessageBox.Show("Results of tests has been saved!");
+            if (find10CB.Checked)
+            {
+                testPrinter.FindMatches10();
+            }
+            if (findAllCB.Checked)
+            {
+                testPrinter.FindMatchesAll();
+            }
+            if (findMostUsed10CB.Checked)
+            {
+                testPrinter.FindMostUsedMatches10();
+            }
+            if (findMostUsedAllCB.Checked)
+            {
+                testPrinter.FindMostUsedMatchesAll();
+            }
+
+            if (new FileManager().SaveNewTextFile(testPrinter.Output))
+            {
+                MessageBox.Show("Results of tests has been saved!");
+            }
         }
 
         private int GetDictSize()
