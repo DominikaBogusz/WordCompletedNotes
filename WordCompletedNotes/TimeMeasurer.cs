@@ -24,11 +24,13 @@ namespace WordCompletedNotes
             switch (algName)
             {
                 case "Simple":
-                    return new SimpleCompletion();
+                    return new SimpleCompletion(DataReferences.VocabularyFile);
                 case "Trie":
-                    return new TrieCompletion();
+                    return new TrieCompletion(DataReferences.VocabularyFile);
                 case "HeapTrie":
-                    return new HeapTrieCompletion();
+                    return new HeapTrieCompletion(DataReferences.VocabularyFile);
+                case "Database":
+                    return new HeapTrieCompletion(DataReferences.VocabularyFile);
                 default:
                     throw new Exception("Something went wrong...");
             }
@@ -45,7 +47,7 @@ namespace WordCompletedNotes
         {
             testedCompletion.Clear();
             Stopwatch watch = Stopwatch.StartNew();
-            testedCompletion.InsertWordsDictionary(dict);
+            testedCompletion.InsertWords(dict);
             return watch.ElapsedTicks;
         }
 

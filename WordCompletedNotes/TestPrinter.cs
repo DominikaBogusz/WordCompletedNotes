@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WordCompletion;
 
 namespace WordCompletedNotes
 {
@@ -49,7 +50,7 @@ namespace WordCompletedNotes
             }
             else
             {
-                dictionary = new DictionaryFromTxt().Dictionary;
+                dictionary = new VocabularyFromTxt(DataReferences.VocabularyFile).GetVocabulary();
             }
             for (int i = 0; i < repetitions; i++)
             {

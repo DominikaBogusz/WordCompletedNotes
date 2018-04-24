@@ -12,25 +12,30 @@ namespace WordCompletedNotes
     {
         private string referencedDbFile = Application.StartupPath + @"\WordsDatabase.mdf";
 
-        public void ReadWords(ref IComplementarable dictionary, string sourceFile)
+        public Dictionary<string, int> ReadWords(string sourceFile)
         {
+            Dictionary<string, int> output = new Dictionary<string, int>();
+
             string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + sourceFile + @";Integrated Security=True";
-            SqlConnection cnn = new SqlConnection(connetionString);
-            cnn.Open();
-
-            SqlCommand cmdSelect = new SqlCommand("SELECT * FROM Words", cnn);
-            SqlDataReader dataReader = cmdSelect.ExecuteReader();
-
-            while (dataReader.Read())
+            using (SqlConnection cnn = new SqlConnection(connetionString))
             {
-                string word = dataReader["Word"].ToString();
-                int count = Int32.Parse(dataReader["UsesCount"].ToString());
-                dictionary.Insert(word, count);
+                cnn.Open();
+
+                SqlCommand cmdSelect = new SqlCommand("SELECT * FROM Words", cnn);
+                SqlDataReader dataReader = cmdSelect.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    string word = dataReader["Word"].ToString();
+                    int count = Int32.Parse(dataReader["UsesCount"].ToString());
+                    output.Add(word, count);
+                }
             }
-            cnn.Close();
+
+            return output;
         }
 
-        public void SaveWords(IComplementarable dictionary, string destFile)
+        public void SaveWords(Dictionary<string, int> words, string destFile)
         {
             bool isOverwrited = File.Exists(destFile);
 
@@ -40,22 +45,22 @@ namespace WordCompletedNotes
             }
 
             string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + destFile + @";Integrated Security=True";
-            SqlConnection cnn = new SqlConnection(connetionString);
-            cnn.Open();
-
-            if (isOverwrited)
+            using (SqlConnection cnn = new SqlConnection(connetionString))
             {
-                SqlCommand cmdDelete = new SqlCommand("DELETE FROM Words", cnn);
-                cmdDelete.ExecuteNonQuery();
-            }
+                cnn.Open();
 
-            Dictionary<string, int> words = dictionary.GetAllWords();
-            for (int i = 0; i < words.Count; i++)
-            {
-                SqlCommand cmdInsert = new SqlCommand("INSERT INTO Words (Word,UsesCount) VALUES ('" + words.Keys.ElementAt(i) + "','" + words.Values.ElementAt(i) + "')", cnn);
-                cmdInsert.ExecuteNonQuery();
+                if (isOverwrited)
+                {
+                    SqlCommand cmdDelete = new SqlCommand("DELETE FROM Words", cnn);
+                    cmdDelete.ExecuteNonQuery();
+                }
+
+                for (int i = 0; i < words.Count; i++)
+                {
+                    SqlCommand cmdInsert = new SqlCommand("INSERT INTO Words (Word,UsesCount) VALUES ('" + words.Keys.ElementAt(i) + "','" + words.Values.ElementAt(i) + "')", cnn);
+                    cmdInsert.ExecuteNonQuery();
+                }
             }
-            cnn.Close();
         }
     }
 }

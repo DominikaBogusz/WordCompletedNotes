@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace WordCompletedNotes
 {
     public partial class MainForm : Form
     {
-        CompletionController completion;
+        CompletionManager completion;
 
         public ViewFitter View { get; private set; }
         public WordProcessor WordProcessor { get; private set; }
@@ -35,7 +36,7 @@ namespace WordCompletedNotes
         {
             InitializeComponent();
 
-            completion = new CompletionController(CompletionType.SIMPLE);
+            completion = new CompletionManager(new SimpleCompletion(DataReferences.VocabularyFile));
 
             autoForm = new AutocompletionForm(this, textBox);
             wordsPreviewForm = new WordsPreviewForm();
@@ -99,7 +100,7 @@ namespace WordCompletedNotes
 
                 if (nextWord != "")
                 {
-                    promptsList = completion.GetWords(nextWord).Keys.ToList();
+                    promptsList = completion.GetMatches(nextWord).Keys.ToList();
                     View.AdjustAndShowPrompts(promptsList);
                 }
             }
@@ -168,7 +169,7 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
-                completion.SaveWords(new TxtStorage(), fileName);
+                new TxtStorage().SaveWords(completion.GetAllUserWords(), fileName);
             }
         }
 
@@ -177,7 +178,7 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetSaveDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
             if (fileName != "")
             {
-                completion.SaveWords(new DbStorage(), fileName);
+                new DbStorage().SaveWords(completion.GetAllUserWords(), fileName);
             }
         }
 
@@ -186,7 +187,7 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
-                completion.ReadWords(new TxtStorage(), fileName);
+                completion.ResetUserWords(new TxtStorage().ReadWords(fileName));
             }
         }
 
@@ -195,13 +196,13 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetOpenDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
             if (fileName != "")
             {
-                completion.ReadWords(new DbStorage(), fileName);
+                completion.ResetUserWords(new DbStorage().ReadWords(fileName));
             }
         }
 
         private void showUsedWordsMenu_Click(object sender, EventArgs e)
         {
-            wordsPreviewForm.SetDataSource(completion.GetUsedWords());
+            wordsPreviewForm.SetDataSource(completion.GetAllUserWords());
             wordsPreviewForm.ShowDialog();
         }
 
@@ -226,14 +227,14 @@ namespace WordCompletedNotes
 
         private void useDictionaryPLMenu_CheckedChanged(object sender, EventArgs e)
         {
-            completion.UseDictionary(useDictionaryPLMenu.Checked);
+            completion.UsePLVocabulary(useDictionaryPLMenu.Checked);
         }
 
         private void algSimpleMenu_Click(object sender, EventArgs e)
         {
             if (!algSimpleMenu.Checked)
             {
-                completion = new CompletionController(CompletionType.SIMPLE, completion.GetUsedWords(), useDictionaryPLMenu.Checked, sortByUsesCountMenu.Checked);
+                completion = new CompletionManager(new SimpleCompletion(DataReferences.VocabularyFile), completion.GetAllUserWords(), sortByUsesCountMenu.Checked, useDictionaryPLMenu.Checked);
                 algSimpleMenu.Checked = true;
                 algTrieMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
@@ -244,7 +245,7 @@ namespace WordCompletedNotes
         {
             if (!algTrieMenu.Checked)
             {
-                completion = new CompletionController(CompletionType.TRIE, completion.GetUsedWords(), useDictionaryPLMenu.Checked, sortByUsesCountMenu.Checked);
+                completion = new CompletionManager(new TrieCompletion(DataReferences.VocabularyFile), completion.GetAllUserWords(), sortByUsesCountMenu.Checked, useDictionaryPLMenu.Checked);
                 algTrieMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
@@ -255,7 +256,7 @@ namespace WordCompletedNotes
         {
             if (!algTrieHeapMenu.Checked)
             {
-                completion = new CompletionController(CompletionType.HEAPTRIE, completion.GetUsedWords(), useDictionaryPLMenu.Checked, sortByUsesCountMenu.Checked);
+                completion = new CompletionManager(new HeapTrieCompletion(DataReferences.VocabularyFile), completion.GetAllUserWords(), sortByUsesCountMenu.Checked, useDictionaryPLMenu.Checked);
                 algTrieHeapMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieMenu.Checked = false;
