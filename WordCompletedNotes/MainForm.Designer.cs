@@ -51,8 +51,6 @@
             this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.testsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testsLibraryTimingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -82,8 +80,7 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.autocompletionToolStripMenuItem,
-            this.wordsDatabaseToolStripMenuItem,
-            this.testsToolStripMenuItem});
+            this.wordsDatabaseToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(6, 5, 0, 5);
@@ -278,24 +275,6 @@
             this.frommdfDatabaseMenu.Text = "from .mdf database";
             this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
             // 
-            // testsToolStripMenuItem
-            // 
-            this.testsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.testsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testsLibraryTimingsToolStripMenuItem});
-            this.testsToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.testsToolStripMenuItem.Name = "testsToolStripMenuItem";
-            this.testsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.T)));
-            this.testsToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
-            this.testsToolStripMenuItem.Text = "&Tests";
-            // 
-            // testsLibraryTimingsToolStripMenuItem
-            // 
-            this.testsLibraryTimingsToolStripMenuItem.Name = "testsLibraryTimingsToolStripMenuItem";
-            this.testsLibraryTimingsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.testsLibraryTimingsToolStripMenuItem.Text = "Tests library timings";
-            this.testsLibraryTimingsToolStripMenuItem.Click += new System.EventHandler(this.testsLibraryTimingsToolStripMenuItem_Click);
-            // 
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 1;
@@ -360,8 +339,6 @@
         private System.Windows.Forms.ToolStripMenuItem algTrieHeapMenu;
         private System.Windows.Forms.ToolStripMenuItem useDictionaryPLMenu;
         private System.Windows.Forms.ToolStripMenuItem sortByUsesCountMenu;
-        private System.Windows.Forms.ToolStripMenuItem testsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testsLibraryTimingsToolStripMenuItem;
     }
 }
 

@@ -9,15 +9,15 @@ namespace WordCompletedNotes
 {
     public class ViewFitter
     {
-        AutocompletionForm autoForm;
-        ListBox listBox;
+        private AutocompletionForm autoForm;
+        private ListBox listBox;
 
-        TextBox textBox;
-        Point textBoxCorner;
+        private TextBox textBox;
+        private Point textBoxCorner;
 
-        float lineHeight;
-        float fontWidth;
-        float spaceWidth;
+        private float lineHeight;
+        private float fontWidth;
+        private float spaceWidth;
 
         public ViewFitter(AutocompletionForm af, ListBox lb, TextBox tb)
         {

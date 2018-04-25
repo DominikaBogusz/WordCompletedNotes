@@ -12,10 +12,10 @@ namespace WordCompletedNotes
 {
     public partial class AutocompletionForm : Form
     {
-        MainForm mainForm;
-        TextBox textBox;
+        private MainForm mainForm;
+        private TextBox textBox;
 
-        bool listBoxClicked = false;
+        private bool listBoxClicked = false;
 
         public AutocompletionForm(MainForm mf, TextBox tb)
         {

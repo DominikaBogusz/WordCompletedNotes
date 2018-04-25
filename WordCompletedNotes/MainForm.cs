@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WordCompletion;
 
@@ -18,25 +9,23 @@ namespace WordCompletedNotes
 {
     public partial class MainForm : Form
     {
-        CompletionManager completion;
+        private CompletionManager completion;
 
         public ViewFitter View { get; private set; }
         public WordProcessor WordProcessor { get; private set; }
 
-        FileManager fileManager;
+        private FileManager fileManager;
 
-        AutocompletionForm autoForm;
-        List<string> promptsList;
+        private AutocompletionForm autoForm;
+        private List<string> promptsList;
 
-        WordsPreviewForm wordsPreviewForm;
-
-        TestForm testForm;
+        private WordsPreviewForm wordsPreviewForm;
 
         public MainForm()
         {
             InitializeComponent();
 
-            completion = new CompletionManager(new SimpleCompletion(DataReferences.VocabularyFile));
+            completion = new CompletionManager(new SimpleCompletion());
 
             autoForm = new AutocompletionForm(this, textBox);
             wordsPreviewForm = new WordsPreviewForm();
@@ -169,7 +158,7 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new TxtStorage().SaveWords(completion.GetAllUserWords(), fileName);
+                new TxtStorage().SaveWords(completion.GetAllWords(), fileName);
             }
         }
 
@@ -178,7 +167,7 @@ namespace WordCompletedNotes
             string fileName = fileManager.GetSaveDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new DbStorage().SaveWords(completion.GetAllUserWords(), fileName);
+                new DbStorage().SaveWords(completion.GetAllWords(), fileName);
             }
         }
 
@@ -202,7 +191,7 @@ namespace WordCompletedNotes
 
         private void showUsedWordsMenu_Click(object sender, EventArgs e)
         {
-            wordsPreviewForm.SetDataSource(completion.GetAllUserWords());
+            wordsPreviewForm.SetDataSource(completion.GetAllWords());
             wordsPreviewForm.ShowDialog();
         }
 
@@ -227,14 +216,14 @@ namespace WordCompletedNotes
 
         private void useDictionaryPLMenu_CheckedChanged(object sender, EventArgs e)
         {
-            completion.UsePLVocabulary(useDictionaryPLMenu.Checked);
+            //completion.UsePLVocabulary(useDictionaryPLMenu.Checked);
         }
 
         private void algSimpleMenu_Click(object sender, EventArgs e)
         {
             if (!algSimpleMenu.Checked)
             {
-                completion = new CompletionManager(new SimpleCompletion(DataReferences.VocabularyFile), completion.GetAllUserWords(), sortByUsesCountMenu.Checked, useDictionaryPLMenu.Checked);
+                completion = new CompletionManager(new SimpleCompletion(), completion.GetAllWords(), sortByUsesCountMenu.Checked);
                 algSimpleMenu.Checked = true;
                 algTrieMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
@@ -245,7 +234,7 @@ namespace WordCompletedNotes
         {
             if (!algTrieMenu.Checked)
             {
-                completion = new CompletionManager(new TrieCompletion(DataReferences.VocabularyFile), completion.GetAllUserWords(), sortByUsesCountMenu.Checked, useDictionaryPLMenu.Checked);
+                completion = new CompletionManager(new TrieCompletion(), completion.GetAllWords(), sortByUsesCountMenu.Checked);
                 algTrieMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
@@ -256,7 +245,7 @@ namespace WordCompletedNotes
         {
             if (!algTrieHeapMenu.Checked)
             {
-                completion = new CompletionManager(new HeapTrieCompletion(DataReferences.VocabularyFile), completion.GetAllUserWords(), sortByUsesCountMenu.Checked, useDictionaryPLMenu.Checked);
+                completion = new CompletionManager(new HeapTrieCompletion(), completion.GetAllWords(), sortByUsesCountMenu.Checked);
                 algTrieHeapMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieMenu.Checked = false;
@@ -266,12 +255,6 @@ namespace WordCompletedNotes
         private void sortByUsesCountMenu_Click(object sender, EventArgs e)
         {
             completion.SortByUsesCount(sortByUsesCountMenu.Checked);
-        }
-
-        private void testsLibraryTimingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            testForm = new TestForm();
-            testForm.ShowDialog();
         }
     }
 }

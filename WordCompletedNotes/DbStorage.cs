@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using WordCompletion;
 
 namespace WordCompletedNotes
 {

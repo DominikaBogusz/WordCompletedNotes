@@ -5,7 +5,7 @@ namespace WordCompletedNotes
 {
     class FileManager
     {
-        string openFile = "";
+        private string openFile = "";
 
         public void ResetFileName()
         {
