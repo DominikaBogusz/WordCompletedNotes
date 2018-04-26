@@ -21,6 +21,8 @@ namespace WordCompletedNotes
 
         private WordsPreviewForm wordsPreviewForm;
 
+        private SettingsForm settingsForm;
+
         public MainForm()
         {
             InitializeComponent();
@@ -34,6 +36,9 @@ namespace WordCompletedNotes
             WordProcessor = new WordProcessor();
 
             fileManager = new FileManager();
+
+            settingsForm = new SettingsForm();
+            settingsForm.Show();
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
