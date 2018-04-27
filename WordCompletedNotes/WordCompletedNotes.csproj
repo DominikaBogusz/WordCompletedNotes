@@ -74,7 +74,8 @@
       <DependentUpon>AutocompletionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DbStorage.cs" />
-    <Compile Include="FileManager.cs" />
+    <Compile Include="FileKit.cs" />
+    <Compile Include="NoteManager.cs" />
     <Compile Include="IStorable.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -92,6 +93,7 @@
     </Compile>
     <Compile Include="TxtStorage.cs" />
     <Compile Include="ViewFitter.cs" />
+    <Compile Include="VocabularyFromTxt.cs" />
     <Compile Include="WordProcessor.cs" />
     <Compile Include="WordsPreviewForm.cs">
       <SubType>Form</SubType>
@@ -146,12 +148,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="data\VocabularyPL.txt" />
-    <Content Include="data\WordsDatabase.mdf">
+    <Content Include="VocabularyPL.txt" />
+    <Content Include="WordsDatabase.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="data\WordsDatabase_log.ldf">
+    <Content Include="WordsDatabase_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>WordsDatabase.mdf</DependentUpon>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

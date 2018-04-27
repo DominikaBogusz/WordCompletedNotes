@@ -7,9 +7,9 @@ using WordCompletion;
 
 namespace WordCompletedNotes
 {
-    class TxtStorage : IStorable
+    static class TxtStorage
     {
-        public Dictionary<string, int> ReadWords(string sourceFile)
+        public static Dictionary<string, int> ReadWords(string sourceFile)
         {
             Dictionary<string, int> output = new Dictionary<string, int>();
             if (File.Exists(sourceFile) == true)
@@ -26,7 +26,7 @@ namespace WordCompletedNotes
             return output;
         }
 
-        public void SaveWords(Dictionary<string, int> words, string destFile)
+        public static void SaveWords(Dictionary<string, int> words, string destFile)
         {
             using (FileStream fs = File.Create(destFile))
             {
@@ -42,6 +42,32 @@ namespace WordCompletedNotes
                     fs.Write(line, 0, line.Length);
                 }
             }
+        }
+
+        public static bool IsValidStorage(string filePath)
+        {
+            if (File.Exists(filePath) == true)
+            {
+                List<string> lines = File.ReadLines(filePath).ToList();
+                foreach (string line in lines)
+                {
+                    string[] columns = line.Split(';');
+                    if (columns.Count() != 2)
+                    {
+                        return false;
+                    }
+                    try
+                    {
+                        int count = Int32.Parse(columns[1]);
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -9,36 +9,40 @@ namespace WordCompletedNotes
 {
     public partial class MainForm : Form
     {
+        private SettingsForm settingsForm;
+
         private CompletionManager completion;
-
-        public ViewFitter View { get; private set; }
-        public WordProcessor WordProcessor { get; private set; }
-
-        private FileManager fileManager;
-
-        private AutocompletionForm autoForm;
         private List<string> promptsList;
+        private AutocompletionForm autoForm;
 
         private WordsPreviewForm wordsPreviewForm;
 
-        private SettingsForm settingsForm;
+        private NoteManager fileManager;
+
+        public ViewFitter View { get; private set; }
+        public WordProcessor WordProcessor { get; private set; }
 
         public MainForm()
         {
             InitializeComponent();
 
-            completion = new CompletionManager(new SimpleCompletion());
+            settingsForm = new SettingsForm(true);
+            settingsForm.ShowDialog();
 
+            promptsList = new List<string>();
             autoForm = new AutocompletionForm(this, textBox);
+
             wordsPreviewForm = new WordsPreviewForm();
+
+            fileManager = new NoteManager();
 
             View = new ViewFitter(autoForm, autoForm.GetListBox(), textBox);
             WordProcessor = new WordProcessor();
+        }
 
-            fileManager = new FileManager();
-
-            settingsForm = new SettingsForm();
-            settingsForm.Show();
+        public void InitializeCompletion(CompletionManager completionManager)
+        {
+            completion = completionManager;
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -84,7 +88,7 @@ namespace WordCompletedNotes
 
             if (char.IsWhiteSpace(e.KeyChar) || char.IsPunctuation(e.KeyChar) || e.KeyChar == '\n')
             {
-                if(lastWord != "") completion.InsertWord(lastWord);
+                if(lastWord != "") completion.Insert(lastWord);
             }
             else
             {
@@ -160,37 +164,37 @@ namespace WordCompletedNotes
 
         private void totxtFileMenu_Click(object sender, EventArgs e)
         {
-            string fileName = fileManager.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
+            string fileName = FileKit.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new TxtStorage().SaveWords(completion.GetAllWords(), fileName);
+                TxtStorage.SaveWords(completion.GetAllWords(), fileName);
             }
         }
 
         private void tomdfDatabaseMenu_Click(object sender, EventArgs e)
         {
-            string fileName = fileManager.GetSaveDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
+            string fileName = FileKit.GetSaveDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
             if (fileName != "")
             {
-                new DbStorage().SaveWords(completion.GetAllWords(), fileName);
+                DbStorage.SaveWords(completion.GetAllWords(), fileName);
             }
         }
 
         private void fromtxtFileMenu_Click(object sender, EventArgs e)
         {
-            string fileName = fileManager.GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
+            string fileName = FileKit.GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
-                completion.ResetUserWords(new TxtStorage().ReadWords(fileName));
+                completion.ResetUserWords(TxtStorage.ReadWords(fileName));
             }
         }
 
         private void frommdfDatabaseMenu_Click(object sender, EventArgs e)
         {
-            string fileName = fileManager.GetOpenDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
+            string fileName = FileKit.GetOpenDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
             if (fileName != "")
             {
-                completion.ResetUserWords(new DbStorage().ReadWords(fileName));
+                completion.ResetUserWords(DbStorage.ReadWords(fileName));
             }
         }
 
@@ -228,7 +232,7 @@ namespace WordCompletedNotes
         {
             if (!algSimpleMenu.Checked)
             {
-                completion = new CompletionManager(new SimpleCompletion(), completion.GetAllWords(), sortByUsesCountMenu.Checked);
+                completion = new CompletionManager(new SimpleCompletion(), sortByUsesCountMenu.Checked, completion.GetAllWords());
                 algSimpleMenu.Checked = true;
                 algTrieMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
@@ -239,7 +243,7 @@ namespace WordCompletedNotes
         {
             if (!algTrieMenu.Checked)
             {
-                completion = new CompletionManager(new TrieCompletion(), completion.GetAllWords(), sortByUsesCountMenu.Checked);
+                completion = new CompletionManager(new TrieCompletion(), sortByUsesCountMenu.Checked, completion.GetAllWords());
                 algTrieMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieHeapMenu.Checked = false;
@@ -250,7 +254,7 @@ namespace WordCompletedNotes
         {
             if (!algTrieHeapMenu.Checked)
             {
-                completion = new CompletionManager(new HeapTrieCompletion(), completion.GetAllWords(), sortByUsesCountMenu.Checked);
+                completion = new CompletionManager(new HeapTrieCompletion(), sortByUsesCountMenu.Checked, completion.GetAllWords());
                 algTrieHeapMenu.Checked = true;
                 algSimpleMenu.Checked = false;
                 algTrieMenu.Checked = false;

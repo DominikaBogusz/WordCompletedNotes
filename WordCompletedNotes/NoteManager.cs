@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace WordCompletedNotes
 {
-    class FileManager
+    class NoteManager
     {
         private string openFile = "";
 
@@ -14,7 +14,7 @@ namespace WordCompletedNotes
 
         public bool SaveNewTextFile(string text)
         {
-            string fileName = GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
+            string fileName = FileKit.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
                 File.WriteAllText(fileName, text);
@@ -39,7 +39,7 @@ namespace WordCompletedNotes
 
         public bool OpenTextFile(TextBox textBox)
         {
-            string fileName = GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
+            string fileName = FileKit.GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
             if (fileName != "")
             {
                 if (File.Exists(fileName) == true)
@@ -52,36 +52,5 @@ namespace WordCompletedNotes
             return false;
         }
 
-        public string GetSaveDialogFileName(string filter)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            saveFileDialog.Filter = filter;
-            saveFileDialog.FilterIndex = 1;
-            saveFileDialog.RestoreDirectory = true;
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                return saveFileDialog.FileName;
-            }
-
-            return "";
-        }
-
-        public string GetOpenDialogFileName(string filter)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.Filter = filter;
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                return openFileDialog.FileName;
-            }
-
-            return "";
-        }
     }
 }

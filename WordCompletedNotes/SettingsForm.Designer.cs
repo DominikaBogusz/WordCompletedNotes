@@ -35,20 +35,20 @@
             this.limitCB = new System.Windows.Forms.CheckBox();
             this.limitNum = new System.Windows.Forms.NumericUpDown();
             this.groupBoxAutocompletion = new System.Windows.Forms.GroupBox();
-            this.groupBoxFile = new System.Windows.Forms.GroupBox();
-            this.newFileRB = new System.Windows.Forms.RadioButton();
-            this.existingFileRB = new System.Windows.Forms.RadioButton();
-            this.fileTextBox = new System.Windows.Forms.TextBox();
+            this.groupBoxNote = new System.Windows.Forms.GroupBox();
             this.fileButton = new System.Windows.Forms.Button();
+            this.fileTextBox = new System.Windows.Forms.TextBox();
+            this.existingFileRB = new System.Windows.Forms.RadioButton();
+            this.newFileRB = new System.Windows.Forms.RadioButton();
             this.groupBoxWordsSource = new System.Windows.Forms.GroupBox();
-            this.noSourceRB = new System.Windows.Forms.RadioButton();
-            this.existingSourceRB = new System.Windows.Forms.RadioButton();
-            this.databaseTextBox = new System.Windows.Forms.TextBox();
             this.databaseButton = new System.Windows.Forms.Button();
+            this.databaseTextBox = new System.Windows.Forms.TextBox();
+            this.existingSourceRB = new System.Windows.Forms.RadioButton();
+            this.noSourceRB = new System.Windows.Forms.RadioButton();
             this.startButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.limitNum)).BeginInit();
             this.groupBoxAutocompletion.SuspendLayout();
-            this.groupBoxFile.SuspendLayout();
+            this.groupBoxNote.SuspendLayout();
             this.groupBoxWordsSource.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,6 +80,7 @@
             this.algComboBox.Name = "algComboBox";
             this.algComboBox.Size = new System.Drawing.Size(153, 23);
             this.algComboBox.TabIndex = 3;
+            this.algComboBox.SelectedIndexChanged += new System.EventHandler(this.algComboBox_SelectedIndexChanged);
             // 
             // vocabularyCB
             // 
@@ -142,20 +143,55 @@
             this.groupBoxAutocompletion.TabStop = false;
             this.groupBoxAutocompletion.Text = "Autocompletion";
             // 
-            // groupBoxFile
+            // groupBoxNote
             // 
-            this.groupBoxFile.Controls.Add(this.fileButton);
-            this.groupBoxFile.Controls.Add(this.fileTextBox);
-            this.groupBoxFile.Controls.Add(this.existingFileRB);
-            this.groupBoxFile.Controls.Add(this.newFileRB);
-            this.groupBoxFile.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxFile.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBoxFile.Location = new System.Drawing.Point(12, 12);
-            this.groupBoxFile.Name = "groupBoxFile";
-            this.groupBoxFile.Size = new System.Drawing.Size(235, 106);
-            this.groupBoxFile.TabIndex = 9;
-            this.groupBoxFile.TabStop = false;
-            this.groupBoxFile.Text = "File";
+            this.groupBoxNote.Controls.Add(this.fileButton);
+            this.groupBoxNote.Controls.Add(this.fileTextBox);
+            this.groupBoxNote.Controls.Add(this.existingFileRB);
+            this.groupBoxNote.Controls.Add(this.newFileRB);
+            this.groupBoxNote.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxNote.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.groupBoxNote.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxNote.Name = "groupBoxNote";
+            this.groupBoxNote.Size = new System.Drawing.Size(235, 106);
+            this.groupBoxNote.TabIndex = 9;
+            this.groupBoxNote.TabStop = false;
+            this.groupBoxNote.Text = "Note";
+            // 
+            // fileButton
+            // 
+            this.fileButton.Enabled = false;
+            this.fileButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fileButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fileButton.Location = new System.Drawing.Point(176, 75);
+            this.fileButton.Name = "fileButton";
+            this.fileButton.Size = new System.Drawing.Size(53, 23);
+            this.fileButton.TabIndex = 3;
+            this.fileButton.Text = "...";
+            this.fileButton.UseVisualStyleBackColor = true;
+            this.fileButton.Click += new System.EventHandler(this.fileButton_Click);
+            // 
+            // fileTextBox
+            // 
+            this.fileTextBox.Enabled = false;
+            this.fileTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fileTextBox.Location = new System.Drawing.Point(9, 75);
+            this.fileTextBox.Name = "fileTextBox";
+            this.fileTextBox.Size = new System.Drawing.Size(160, 23);
+            this.fileTextBox.TabIndex = 2;
+            // 
+            // existingFileRB
+            // 
+            this.existingFileRB.AutoSize = true;
+            this.existingFileRB.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.existingFileRB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.existingFileRB.Location = new System.Drawing.Point(9, 50);
+            this.existingFileRB.Name = "existingFileRB";
+            this.existingFileRB.Size = new System.Drawing.Size(148, 19);
+            this.existingFileRB.TabIndex = 1;
+            this.existingFileRB.Text = "Select existing file (.txt):";
+            this.existingFileRB.UseVisualStyleBackColor = true;
+            this.existingFileRB.CheckedChanged += new System.EventHandler(this.fileSourceChanged);
             // 
             // newFileRB
             // 
@@ -172,40 +208,6 @@
             this.newFileRB.UseVisualStyleBackColor = true;
             this.newFileRB.CheckedChanged += new System.EventHandler(this.fileSourceChanged);
             // 
-            // existingFileRB
-            // 
-            this.existingFileRB.AutoSize = true;
-            this.existingFileRB.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.existingFileRB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.existingFileRB.Location = new System.Drawing.Point(9, 50);
-            this.existingFileRB.Name = "existingFileRB";
-            this.existingFileRB.Size = new System.Drawing.Size(148, 19);
-            this.existingFileRB.TabIndex = 1;
-            this.existingFileRB.Text = "Select existing file (.txt):";
-            this.existingFileRB.UseVisualStyleBackColor = true;
-            this.existingFileRB.CheckedChanged += new System.EventHandler(this.fileSourceChanged);
-            // 
-            // fileTextBox
-            // 
-            this.fileTextBox.Enabled = false;
-            this.fileTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileTextBox.Location = new System.Drawing.Point(9, 75);
-            this.fileTextBox.Name = "fileTextBox";
-            this.fileTextBox.Size = new System.Drawing.Size(160, 23);
-            this.fileTextBox.TabIndex = 2;
-            // 
-            // fileButton
-            // 
-            this.fileButton.Enabled = false;
-            this.fileButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.fileButton.Location = new System.Drawing.Point(176, 75);
-            this.fileButton.Name = "fileButton";
-            this.fileButton.Size = new System.Drawing.Size(53, 23);
-            this.fileButton.TabIndex = 3;
-            this.fileButton.Text = "...";
-            this.fileButton.UseVisualStyleBackColor = true;
-            // 
             // groupBoxWordsSource
             // 
             this.groupBoxWordsSource.Controls.Add(this.databaseButton);
@@ -220,6 +222,41 @@
             this.groupBoxWordsSource.TabIndex = 10;
             this.groupBoxWordsSource.TabStop = false;
             this.groupBoxWordsSource.Text = "Words source";
+            // 
+            // databaseButton
+            // 
+            this.databaseButton.Enabled = false;
+            this.databaseButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.databaseButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.databaseButton.Location = new System.Drawing.Point(176, 73);
+            this.databaseButton.Name = "databaseButton";
+            this.databaseButton.Size = new System.Drawing.Size(53, 23);
+            this.databaseButton.TabIndex = 4;
+            this.databaseButton.Text = "...";
+            this.databaseButton.UseVisualStyleBackColor = true;
+            this.databaseButton.Click += new System.EventHandler(this.databaseButton_Click);
+            // 
+            // databaseTextBox
+            // 
+            this.databaseTextBox.Enabled = false;
+            this.databaseTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.databaseTextBox.Location = new System.Drawing.Point(9, 74);
+            this.databaseTextBox.Name = "databaseTextBox";
+            this.databaseTextBox.Size = new System.Drawing.Size(160, 23);
+            this.databaseTextBox.TabIndex = 3;
+            // 
+            // existingSourceRB
+            // 
+            this.existingSourceRB.AutoSize = true;
+            this.existingSourceRB.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.existingSourceRB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.existingSourceRB.Location = new System.Drawing.Point(9, 49);
+            this.existingSourceRB.Name = "existingSourceRB";
+            this.existingSourceRB.Size = new System.Drawing.Size(214, 19);
+            this.existingSourceRB.TabIndex = 2;
+            this.existingSourceRB.Text = "Select existing words database (.txt):";
+            this.existingSourceRB.UseVisualStyleBackColor = true;
+            this.existingSourceRB.CheckedChanged += new System.EventHandler(this.databaseSourceChanged);
             // 
             // noSourceRB
             // 
@@ -236,40 +273,6 @@
             this.noSourceRB.UseVisualStyleBackColor = true;
             this.noSourceRB.CheckedChanged += new System.EventHandler(this.databaseSourceChanged);
             // 
-            // existingSourceRB
-            // 
-            this.existingSourceRB.AutoSize = true;
-            this.existingSourceRB.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.existingSourceRB.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.existingSourceRB.Location = new System.Drawing.Point(9, 49);
-            this.existingSourceRB.Name = "existingSourceRB";
-            this.existingSourceRB.Size = new System.Drawing.Size(214, 19);
-            this.existingSourceRB.TabIndex = 2;
-            this.existingSourceRB.Text = "Select existing words database (.txt):";
-            this.existingSourceRB.UseVisualStyleBackColor = true;
-            this.existingSourceRB.CheckedChanged += new System.EventHandler(this.databaseSourceChanged);
-            // 
-            // databaseTextBox
-            // 
-            this.databaseTextBox.Enabled = false;
-            this.databaseTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.databaseTextBox.Location = new System.Drawing.Point(9, 74);
-            this.databaseTextBox.Name = "databaseTextBox";
-            this.databaseTextBox.Size = new System.Drawing.Size(160, 23);
-            this.databaseTextBox.TabIndex = 3;
-            // 
-            // databaseButton
-            // 
-            this.databaseButton.Enabled = false;
-            this.databaseButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.databaseButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.databaseButton.Location = new System.Drawing.Point(176, 73);
-            this.databaseButton.Name = "databaseButton";
-            this.databaseButton.Size = new System.Drawing.Size(53, 23);
-            this.databaseButton.TabIndex = 4;
-            this.databaseButton.Text = "...";
-            this.databaseButton.UseVisualStyleBackColor = true;
-            // 
             // startButton
             // 
             this.startButton.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -280,6 +283,7 @@
             this.startButton.TabIndex = 11;
             this.startButton.Text = "Start editing note";
             this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // SettingsForm
             // 
@@ -289,15 +293,16 @@
             this.ClientSize = new System.Drawing.Size(258, 417);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.groupBoxWordsSource);
-            this.Controls.Add(this.groupBoxFile);
+            this.Controls.Add(this.groupBoxNote);
             this.Controls.Add(this.groupBoxAutocompletion);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "SettingsForm";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.limitNum)).EndInit();
             this.groupBoxAutocompletion.ResumeLayout(false);
             this.groupBoxAutocompletion.PerformLayout();
-            this.groupBoxFile.ResumeLayout(false);
-            this.groupBoxFile.PerformLayout();
+            this.groupBoxNote.ResumeLayout(false);
+            this.groupBoxNote.PerformLayout();
             this.groupBoxWordsSource.ResumeLayout(false);
             this.groupBoxWordsSource.PerformLayout();
             this.ResumeLayout(false);
@@ -313,7 +318,7 @@
         private System.Windows.Forms.CheckBox limitCB;
         private System.Windows.Forms.NumericUpDown limitNum;
         private System.Windows.Forms.GroupBox groupBoxAutocompletion;
-        private System.Windows.Forms.GroupBox groupBoxFile;
+        private System.Windows.Forms.GroupBox groupBoxNote;
         private System.Windows.Forms.Button fileButton;
         private System.Windows.Forms.TextBox fileTextBox;
         private System.Windows.Forms.RadioButton existingFileRB;

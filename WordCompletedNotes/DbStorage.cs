@@ -7,11 +7,11 @@ using System.Windows.Forms;
 
 namespace WordCompletedNotes
 {
-    class DbStorage : IStorable
+    static class DbStorage
     {
-        private string referencedDbFile = Application.StartupPath + @"\WordsDatabase.mdf";
+        private static string referencedDbFile = Application.StartupPath + @"\WordsDatabase.mdf";
 
-        public Dictionary<string, int> ReadWords(string sourceFile)
+        public static Dictionary<string, int> ReadWords(string sourceFile)
         {
             Dictionary<string, int> output = new Dictionary<string, int>();
 
@@ -34,7 +34,7 @@ namespace WordCompletedNotes
             return output;
         }
 
-        public void SaveWords(Dictionary<string, int> words, string destFile)
+        public static void SaveWords(Dictionary<string, int> words, string destFile)
         {
             bool isOverwrited = File.Exists(destFile);
 
@@ -60,6 +60,49 @@ namespace WordCompletedNotes
                     cmdInsert.ExecuteNonQuery();
                 }
             }
+        }
+
+        public static bool IsValidStorage(string filePath)
+        {
+            if (File.Exists(filePath) == true)
+            {
+                string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + filePath + @";Integrated Security=True";
+                using (SqlConnection cnn = new SqlConnection(connetionString))
+                {
+                    try
+                    {
+                        cnn.Open();
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+
+                    if (!IsCommandExecutingCorrectly("SELECT TOP(1) Id,Word,UsesCount FROM UserWords", cnn))
+                        return false;
+
+                    if (!IsCommandExecutingCorrectly("SELECT TOP(1) Id,Word,UsesCount FROM VocabularyWords", cnn))
+                        return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private static bool IsCommandExecutingCorrectly(string command, SqlConnection cnn)
+        {
+            SqlCommand selectUserWords = new SqlCommand(command, cnn);
+            SqlDataReader dataReader;
+            try
+            {
+                dataReader = selectUserWords.ExecuteReader();
+            }
+            catch
+            {
+                return false;
+            }
+            dataReader.Close();
+            return true;
         }
     }
 }
