@@ -7,9 +7,9 @@ namespace WordCompletedNotes
     {
         private string openFile = "";
 
-        public void ResetFileName()
+        public void ResetFileName(string fileName = "")
         {
-            openFile = "";
+            openFile = fileName;
         }
 
         public bool SaveNewTextFile(string text)

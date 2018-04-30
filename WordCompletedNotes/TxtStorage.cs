@@ -12,7 +12,7 @@ namespace WordCompletedNotes
         public static Dictionary<string, int> ReadWords(string sourceFile)
         {
             Dictionary<string, int> output = new Dictionary<string, int>();
-            if (File.Exists(sourceFile) == true)
+            if (File.Exists(sourceFile))
             {  
                 List<string> lines = File.ReadLines(sourceFile).ToList();
                 foreach (string line in lines)
@@ -46,7 +46,7 @@ namespace WordCompletedNotes
 
         public static bool IsValidStorage(string filePath)
         {
-            if (File.Exists(filePath) == true)
+            if (File.Exists(filePath))
             {
                 List<string> lines = File.ReadLines(filePath).ToList();
                 foreach (string line in lines)
@@ -68,6 +68,31 @@ namespace WordCompletedNotes
                 return true;
             }
             return false;
+        }
+
+        public static bool CreateNewStorage(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch
+                {
+                    return false;
+                }
+                
+            }
+            try
+            {
+                File.Create(filePath);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

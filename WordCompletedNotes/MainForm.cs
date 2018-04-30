@@ -13,6 +13,7 @@ namespace WordCompletedNotes
 
         private CompletionManager completion;
         private List<string> promptsList;
+        private int maxPrompts;
         private AutocompletionForm autoForm;
 
         private WordsPreviewForm wordsPreviewForm;
@@ -26,7 +27,7 @@ namespace WordCompletedNotes
         {
             InitializeComponent();
 
-            settingsForm = new SettingsForm(true);
+            settingsForm = new SettingsForm(this);
             settingsForm.ShowDialog();
 
             promptsList = new List<string>();
@@ -40,9 +41,10 @@ namespace WordCompletedNotes
             WordProcessor = new WordProcessor();
         }
 
-        public void InitializeCompletion(CompletionManager completionManager)
+        public void Initialize(CompletionManager completionManager, int maxPrompts)
         {
             completion = completionManager;
+            this.maxPrompts = maxPrompts;
         }
 
         private void textBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -98,7 +100,7 @@ namespace WordCompletedNotes
 
                 if (nextWord != "")
                 {
-                    promptsList = completion.GetMatches(nextWord).Keys.ToList();
+                    promptsList = completion.GetMatches(nextWord, maxPrompts).Keys.ToList();
                     View.AdjustAndShowPrompts(promptsList);
                 }
             }
@@ -162,42 +164,6 @@ namespace WordCompletedNotes
             Application.Exit();
         }
 
-        private void totxtFileMenu_Click(object sender, EventArgs e)
-        {
-            string fileName = FileKit.GetSaveDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
-            if (fileName != "")
-            {
-                TxtStorage.SaveWords(completion.GetAllWords(), fileName);
-            }
-        }
-
-        private void tomdfDatabaseMenu_Click(object sender, EventArgs e)
-        {
-            string fileName = FileKit.GetSaveDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
-            if (fileName != "")
-            {
-                DbStorage.SaveWords(completion.GetAllWords(), fileName);
-            }
-        }
-
-        private void fromtxtFileMenu_Click(object sender, EventArgs e)
-        {
-            string fileName = FileKit.GetOpenDialogFileName("txt files (*.txt)|*.txt|All files (*.*)|*.*");
-            if (fileName != "")
-            {
-                completion.ResetUserWords(TxtStorage.ReadWords(fileName));
-            }
-        }
-
-        private void frommdfDatabaseMenu_Click(object sender, EventArgs e)
-        {
-            string fileName = FileKit.GetOpenDialogFileName("mdf files (*.mdf)|*.mdf|All files (*.*)|*.*");
-            if (fileName != "")
-            {
-                completion.ResetUserWords(DbStorage.ReadWords(fileName));
-            }
-        }
-
         private void showUsedWordsMenu_Click(object sender, EventArgs e)
         {
             wordsPreviewForm.SetDataSource(completion.GetAllWords());
@@ -221,49 +187,6 @@ namespace WordCompletedNotes
                 Cursor = new Cursor(Cursor.Current.Handle);
                 autoForm.ClearAndHide();
             }
-        }
-
-        private void useDictionaryPLMenu_CheckedChanged(object sender, EventArgs e)
-        {
-            //completion.UsePLVocabulary(useDictionaryPLMenu.Checked);
-        }
-
-        private void algSimpleMenu_Click(object sender, EventArgs e)
-        {
-            if (!algSimpleMenu.Checked)
-            {
-                completion = new CompletionManager(new SimpleCompletion(), sortByUsesCountMenu.Checked, completion.GetAllWords());
-                algSimpleMenu.Checked = true;
-                algTrieMenu.Checked = false;
-                algTrieHeapMenu.Checked = false;
-            }
-        }
-
-        private void algTrieMenu_Click(object sender, EventArgs e)
-        {
-            if (!algTrieMenu.Checked)
-            {
-                completion = new CompletionManager(new TrieCompletion(), sortByUsesCountMenu.Checked, completion.GetAllWords());
-                algTrieMenu.Checked = true;
-                algSimpleMenu.Checked = false;
-                algTrieHeapMenu.Checked = false;
-            }
-        }
-
-        private void algTrieHeapMenu_Click(object sender, EventArgs e)
-        {
-            if (!algTrieHeapMenu.Checked)
-            {
-                completion = new CompletionManager(new HeapTrieCompletion(), sortByUsesCountMenu.Checked, completion.GetAllWords());
-                algTrieHeapMenu.Checked = true;
-                algSimpleMenu.Checked = false;
-                algTrieMenu.Checked = false;
-            }
-        }
-
-        private void sortByUsesCountMenu_Click(object sender, EventArgs e)
-        {
-            completion.SortByUsesCount(sortByUsesCountMenu.Checked);
         }
     }
 }

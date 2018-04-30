@@ -104,5 +104,26 @@ namespace WordCompletedNotes
             dataReader.Close();
             return true;
         }
+
+        public static bool CreateNewStorage(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    string logs = filePath.Remove(filePath.Length - 4);
+                    logs += "_log.ldf";
+                    File.Delete(logs);
+                }
+                File.Copy(referencedDbFile, filePath, false);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,32 +14,14 @@ namespace WordCompletedNotes
 {
     public partial class SettingsForm : Form
     {
-        public SettingsForm(bool firstUse)
+        private MainForm mainForm;
+
+        public SettingsForm(MainForm mainForm)
         {
             InitializeComponent();
-
-            ControlBox = !firstUse;
-
+            this.mainForm = mainForm;
+            ControlBox = false;
             algComboBox.SelectedIndex = 0;
-        }
-
-        private void fileSourceChanged(object sender, EventArgs e)
-        {
-            fileTextBox.Enabled = fileButton.Enabled = existingFileRB.Checked;
-        }
-
-        private void databaseSourceChanged(object sender, EventArgs e)
-        {
-            databaseTextBox.Enabled = databaseButton.Enabled = existingSourceRB.Checked;
-        }
-
-        private void fileButton_Click(object sender, EventArgs e)
-        {
-            string fileName = FileKit.GetOpenDialogFileName("txt files (*.txt)|*.txt");
-            if (fileName != "")
-            {
-                fileTextBox.Text = fileName;
-            }
         }
 
         private void databaseButton_Click(object sender, EventArgs e)
@@ -48,92 +31,159 @@ namespace WordCompletedNotes
             {
                 filter = "mdf files (*.mdf)|*.mdf";
             }
-            string fileName = FileKit.GetOpenDialogFileName(filter);
-            if (fileName != "")
+            string fileName = "";
+            if (newSourceRB.Checked)
             {
-                databaseTextBox.Text = fileName;
+                fileName = FileKit.GetSaveDialogFileName(filter);
+            }
+            else
+            {
+                fileName = FileKit.GetOpenDialogFileName(filter);
+            }
+            sourceTextBox.Text = fileName;
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            IComplementarable completion = SetCompletionType(algComboBox.SelectedIndex);
+
+            if (completion != null)
+            {
+                Dictionary<string, int> vocabularyWords = GetTxtVocabularyWords();
+
+                Dictionary<string, int> sourceWords = GetTxtSourceWords();
+
+                CompletionManager completionManager = new CompletionManager(completion, sortCB.Checked, vocabularyWords);
+                if (sourceWords != null)
+                {
+                    completionManager.Insert(sourceWords);
+                }
+                mainForm.Initialize(completionManager, (int)limitNum.Value);
+                Close();
+            }
+            else
+            {
+                string databasePath = GetDbPath();
+                if (databasePath != "")
+                {
+                    CompletionManager completionManager = new CompletionManager(new DatabaseCompletion(databasePath, vocabularyCB.Checked), sortCB.Checked, null);
+                    mainForm.Initialize(completionManager, (int)limitNum.Value);
+                    Close();
+                }
+            }
+        }
+
+        private IComplementarable SetCompletionType(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return new SimpleCompletion();
+                case 1:
+                    return new TrieCompletion();
+                case 2:
+                    return new HeapTrieCompletion();
+                case 3:
+                    return null;
+            }
+            return null;
+        }
+
+        private Dictionary<string, int> GetTxtVocabularyWords()
+        {
+            if (vocabularyCB.Checked)
+            {
+                return VocabularyFromTxt.GetVocabulary();
+            }
+            return null;
+        }
+
+        private Dictionary<string, int> GetTxtSourceWords()
+        {
+            if (existingSourceRB.Checked)
+            {
+                if (sourceTextBox.Text == "" || TxtStorage.IsValidStorage(sourceTextBox.Text) == false)
+                {
+                    MessageBox.Show("Select valid storage or check 'no initial words' option.");
+                }
+                else
+                {
+                    return TxtStorage.ReadWords(sourceTextBox.Text);
+                }
+            }
+            else
+            {
+                TxtStorage.CreateNewStorage(sourceTextBox.Text);              
+            }
+            return null;
+        }
+
+        private string GetDbPath()
+        {
+            if (existingSourceRB.Checked)
+            {
+                if (sourceTextBox.Text == "" || DbStorage.IsValidStorage(sourceTextBox.Text) == false)
+                {
+                    MessageBox.Show("Select valid database or check 'create new storage' option.");
+                }
+                else
+                {
+                    return sourceTextBox.Text;
+                }
+            }
+            else
+            {
+                if (sourceTextBox.Text != "")
+                {
+                    if (DbStorage.CreateNewStorage(sourceTextBox.Text) == true)
+                    {
+                        return sourceTextBox.Text;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Could not create database. Check if selected path is correct.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Select path to create new database.");
+                }
+            }
+            return "";
+        }
+
+        private void limitCB_CheckedChanged(object sender, EventArgs e)
+        {
+            limitNum.Enabled = limitCB.Checked;
+            if (!limitCB.Checked)
+            {
+                limitNum.Value = 0;
             }
         }
 
         private void algComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (algComboBox.SelectedIndex == 3) //DB
+            if (sourceTextBox.Text != "" && newSourceRB.Checked)
             {
-                existingSourceRB.Text = "Select existing words database (.mdf):";
-            }
-            else
-            {
-                existingSourceRB.Text = "Select existing words database (.txt):";
-            }
-        }
-
-        private void startButton_Click(object sender, EventArgs e)
-        {
-            Close();
-
-            IComplementarable completion = SetCompletionType(algComboBox.SelectedText);
-
-            CompletionManager completionManager;
-
-            if (completion != null)
-            {
-                Dictionary<string, int> vocabularyWords = null;
-                if (vocabularyCB.Checked)
-                {
-                    vocabularyWords = VocabularyFromTxt.GetVocabulary();
-                }
-
-                Dictionary<string, int> sourceWords = null;
-                if (existingSourceRB.Checked)
-                {
-                    if (databaseTextBox.Text == "" || TxtStorage.IsValidStorage(databaseTextBox.Text) == false)
-                    {
-                        MessageBox.Show("Select valid database or check 'no initial words' option.");
-                        databaseTextBox.Text = "";
-                    }
-                    else
-                    {
-                        sourceWords = TxtStorage.ReadWords(databaseTextBox.Text);
-                    }
-                }
-
-                completionManager = new CompletionManager(completion, sortCB.Checked, vocabularyWords);
-                completionManager.Insert(sourceWords);
-            }
-
-            if (completion == null)
-            {
-                string databasePath = "";
-                if (existingSourceRB.Checked)
-                {
-                    if (databaseTextBox.Text == "" || DbStorage.IsValidStorage(databaseTextBox.Text) == false)
-                    {
-                        MessageBox.Show("Select valid database or check 'no initial words' option.");
-                        databaseTextBox.Text = "";
-                    }
+                sourceTextBox.Text = sourceTextBox.Text.Remove(sourceTextBox.Text.Length - 4);
+                if (algComboBox.SelectedIndex == 3) //DB
+                { 
+                    sourceTextBox.Text += ".mdf";
                 }
                 else
                 {
-                    //databasePath = CopyReferencedDatabaseToTemporaryPath();
+                    sourceTextBox.Text += ".txt";
                 }
-                completionManager = new CompletionManager(new DatabaseCompletion(databasePath, vocabularyCB.Checked), sortCB.Checked, null);
+            }
+            else if(sourceTextBox.Text != "" && existingSourceRB.Checked)
+            {
+                sourceTextBox.Text = "";
             }
         }
 
-        private IComplementarable SetCompletionType(string algName)
+        private void wordsSource_CheckedChange(object sender, EventArgs e)
         {
-            switch (algName)
-            {
-                case "Simple":
-                    return new SimpleCompletion();
-                case "Trie":
-                    return new TrieCompletion();
-                case "HeapTrie":
-                    return new HeapTrieCompletion();
-                case "Database":
-                    return null;
-            }
-            return null;
+            sourceTextBox.Text = "";
         }
     }
 }

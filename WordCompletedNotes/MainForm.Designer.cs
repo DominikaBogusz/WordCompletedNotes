@@ -36,21 +36,8 @@
             this.saveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.autocompletionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.algorithmMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.algSimpleMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.algTrieMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.algTrieHeapMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.sortByUsesCountMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.useDictionaryPLMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.wordsDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showUsedWordsMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveUsedWordsMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.totxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.tomdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.openWordsDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromtxtFileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.frommdfDatabaseMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
@@ -79,7 +66,6 @@
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.autocompletionToolStripMenuItem,
             this.wordsDatabaseToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -145,77 +131,11 @@
             this.exitMenu.Text = "Exit";
             this.exitMenu.Click += new System.EventHandler(this.exitMenu_Click);
             // 
-            // autocompletionToolStripMenuItem
-            // 
-            this.autocompletionToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.autocompletionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.algorithmMenu,
-            this.sortByUsesCountMenu,
-            this.useDictionaryPLMenu});
-            this.autocompletionToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.autocompletionToolStripMenuItem.Name = "autocompletionToolStripMenuItem";
-            this.autocompletionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
-            this.autocompletionToolStripMenuItem.Size = new System.Drawing.Size(106, 20);
-            this.autocompletionToolStripMenuItem.Text = "&Autocompletion";
-            // 
-            // algorithmMenu
-            // 
-            this.algorithmMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.algSimpleMenu,
-            this.algTrieMenu,
-            this.algTrieHeapMenu});
-            this.algorithmMenu.Name = "algorithmMenu";
-            this.algorithmMenu.Size = new System.Drawing.Size(173, 22);
-            this.algorithmMenu.Text = "Algorithm";
-            // 
-            // algSimpleMenu
-            // 
-            this.algSimpleMenu.Checked = true;
-            this.algSimpleMenu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.algSimpleMenu.Name = "algSimpleMenu";
-            this.algSimpleMenu.Size = new System.Drawing.Size(150, 22);
-            this.algSimpleMenu.Text = "Simple";
-            this.algSimpleMenu.Click += new System.EventHandler(this.algSimpleMenu_Click);
-            // 
-            // algTrieMenu
-            // 
-            this.algTrieMenu.Name = "algTrieMenu";
-            this.algTrieMenu.Size = new System.Drawing.Size(150, 22);
-            this.algTrieMenu.Text = "Trie";
-            this.algTrieMenu.Click += new System.EventHandler(this.algTrieMenu_Click);
-            // 
-            // algTrieHeapMenu
-            // 
-            this.algTrieHeapMenu.Name = "algTrieHeapMenu";
-            this.algTrieHeapMenu.Size = new System.Drawing.Size(150, 22);
-            this.algTrieHeapMenu.Text = "Trie with Heap";
-            this.algTrieHeapMenu.Click += new System.EventHandler(this.algTrieHeapMenu_Click);
-            // 
-            // sortByUsesCountMenu
-            // 
-            this.sortByUsesCountMenu.Checked = true;
-            this.sortByUsesCountMenu.CheckOnClick = true;
-            this.sortByUsesCountMenu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sortByUsesCountMenu.Name = "sortByUsesCountMenu";
-            this.sortByUsesCountMenu.Size = new System.Drawing.Size(173, 22);
-            this.sortByUsesCountMenu.Text = "Sort by uses count";
-            this.sortByUsesCountMenu.Click += new System.EventHandler(this.sortByUsesCountMenu_Click);
-            // 
-            // useDictionaryPLMenu
-            // 
-            this.useDictionaryPLMenu.CheckOnClick = true;
-            this.useDictionaryPLMenu.Name = "useDictionaryPLMenu";
-            this.useDictionaryPLMenu.Size = new System.Drawing.Size(173, 22);
-            this.useDictionaryPLMenu.Text = "Use dictionary (PL)";
-            this.useDictionaryPLMenu.CheckedChanged += new System.EventHandler(this.useDictionaryPLMenu_CheckedChanged);
-            // 
             // wordsDatabaseToolStripMenuItem
             // 
             this.wordsDatabaseToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlDark;
             this.wordsDatabaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showUsedWordsMenu,
-            this.saveUsedWordsMenu,
-            this.openWordsDatabaseMenu});
+            this.showUsedWordsMenu});
             this.wordsDatabaseToolStripMenuItem.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.wordsDatabaseToolStripMenuItem.Name = "wordsDatabaseToolStripMenuItem";
             this.wordsDatabaseToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.W)));
@@ -225,55 +145,9 @@
             // showUsedWordsMenu
             // 
             this.showUsedWordsMenu.Name = "showUsedWordsMenu";
-            this.showUsedWordsMenu.Size = new System.Drawing.Size(188, 22);
+            this.showUsedWordsMenu.Size = new System.Drawing.Size(166, 22);
             this.showUsedWordsMenu.Text = "Show used words";
             this.showUsedWordsMenu.Click += new System.EventHandler(this.showUsedWordsMenu_Click);
-            // 
-            // saveUsedWordsMenu
-            // 
-            this.saveUsedWordsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.totxtFileMenu,
-            this.tomdfDatabaseMenu});
-            this.saveUsedWordsMenu.Name = "saveUsedWordsMenu";
-            this.saveUsedWordsMenu.Size = new System.Drawing.Size(188, 22);
-            this.saveUsedWordsMenu.Text = "Save used words";
-            // 
-            // totxtFileMenu
-            // 
-            this.totxtFileMenu.Name = "totxtFileMenu";
-            this.totxtFileMenu.Size = new System.Drawing.Size(163, 22);
-            this.totxtFileMenu.Text = "to .txt file";
-            this.totxtFileMenu.Click += new System.EventHandler(this.totxtFileMenu_Click);
-            // 
-            // tomdfDatabaseMenu
-            // 
-            this.tomdfDatabaseMenu.Name = "tomdfDatabaseMenu";
-            this.tomdfDatabaseMenu.Size = new System.Drawing.Size(163, 22);
-            this.tomdfDatabaseMenu.Text = "to .mdf database";
-            this.tomdfDatabaseMenu.Click += new System.EventHandler(this.tomdfDatabaseMenu_Click);
-            // 
-            // openWordsDatabaseMenu
-            // 
-            this.openWordsDatabaseMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromtxtFileMenu,
-            this.frommdfDatabaseMenu});
-            this.openWordsDatabaseMenu.Name = "openWordsDatabaseMenu";
-            this.openWordsDatabaseMenu.Size = new System.Drawing.Size(188, 22);
-            this.openWordsDatabaseMenu.Text = "Open words database";
-            // 
-            // fromtxtFileMenu
-            // 
-            this.fromtxtFileMenu.Name = "fromtxtFileMenu";
-            this.fromtxtFileMenu.Size = new System.Drawing.Size(178, 22);
-            this.fromtxtFileMenu.Text = "from .txt file";
-            this.fromtxtFileMenu.Click += new System.EventHandler(this.fromtxtFileMenu_Click);
-            // 
-            // frommdfDatabaseMenu
-            // 
-            this.frommdfDatabaseMenu.Name = "frommdfDatabaseMenu";
-            this.frommdfDatabaseMenu.Size = new System.Drawing.Size(178, 22);
-            this.frommdfDatabaseMenu.Text = "from .mdf database";
-            this.frommdfDatabaseMenu.Click += new System.EventHandler(this.frommdfDatabaseMenu_Click);
             // 
             // tableLayoutPanel
             // 
@@ -326,20 +200,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveAsMenu;
         private System.Windows.Forms.ToolStripMenuItem exitMenu;
         private System.Windows.Forms.ToolStripMenuItem wordsDatabaseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveUsedWordsMenu;
-        private System.Windows.Forms.ToolStripMenuItem totxtFileMenu;
-        private System.Windows.Forms.ToolStripMenuItem tomdfDatabaseMenu;
-        private System.Windows.Forms.ToolStripMenuItem openWordsDatabaseMenu;
-        private System.Windows.Forms.ToolStripMenuItem fromtxtFileMenu;
-        private System.Windows.Forms.ToolStripMenuItem frommdfDatabaseMenu;
         private System.Windows.Forms.ToolStripMenuItem showUsedWordsMenu;
-        private System.Windows.Forms.ToolStripMenuItem autocompletionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem algorithmMenu;
-        private System.Windows.Forms.ToolStripMenuItem algSimpleMenu;
-        private System.Windows.Forms.ToolStripMenuItem algTrieMenu;
-        private System.Windows.Forms.ToolStripMenuItem algTrieHeapMenu;
-        private System.Windows.Forms.ToolStripMenuItem useDictionaryPLMenu;
-        private System.Windows.Forms.ToolStripMenuItem sortByUsesCountMenu;
     }
 }
 

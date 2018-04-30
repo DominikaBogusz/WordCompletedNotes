@@ -11,7 +11,7 @@ namespace WordCompletion
 {
     public static class VocabularyFromTxt
     {
-        static string vocabularyFile = Application.StartupPath + @"\data\VocabularyPL.txt";
+        static string vocabularyFile = Application.StartupPath + @"\VocabularyPL.txt";
 
         public static Dictionary<string, int> GetVocabulary()
         {
